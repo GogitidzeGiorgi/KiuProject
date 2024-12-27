@@ -1,0 +1,13 @@
+num := 591230
+largestDigit := -1 
+if num < 0 {
+   num = -num
+}
+for num != 0 {
+   digit := num % 10 
+   if digit > largestDigit {
+      largestDigit = digit 
+   }
+   num /= 10
+}
+Println(largestDigit)

@@ -1,0 +1,6 @@
+a := 28
+b := 21
+for b != 0 {
+  a, b = b, a%b      
+}
+Println(a)
