@@ -1,6 +1,6 @@
 
 public class InputCounter {
-    public static boolean checkInt, checkString=false;
+    public static boolean checkInt, checkInt1, checkString=false;
     public static int WordCounter(String program) {
         String assign = ":=";
         int index = 0;
@@ -12,21 +12,29 @@ public class InputCounter {
             index = pos + 1;
         }
         return count;
-    } /// Not used
+    } /// Never used
+    public static boolean checkInt2(String code){
+        checkInt1 = false;
+        for (char c : code.toCharArray()) {
+            if (Character.isDigit(c)) {
+                checkInt1 = true;
+            }
 
-    public static int IntCounter(String program) {
-        int IntCount = 0;
+        }
+        return checkInt1;
+    }
+    public static int DigitCounter(String program) {
 
+        int DigitCount = 0;
 
         for (char c : program.toCharArray()) {
             if (Character.isDigit(c)) {
-                IntCount++;
+                DigitCount++;
                 checkInt = true;
             }
         }
-//        }
-        return IntCount;
-    }
+        return DigitCount;
+    } /// Never used
 
     public static int StringCounter(String program) {
         int StringIndex = 0;
@@ -38,9 +46,7 @@ public class InputCounter {
                 checkString=true;
             }
         }
-
         String S_assign2 = "\"";
-
 
         while (true) {
             int pos = program.indexOf(S_assign2, StringIndex);
@@ -48,8 +54,6 @@ public class InputCounter {
             StringCount++;
             StringIndex = pos + 1;
         }
-
-
         return StringCount/2;
     }
 }
