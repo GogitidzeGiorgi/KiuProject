@@ -1,52 +1,147 @@
-public class MinimalInterpreter extends Assignment {
-    public void eval(String code) {
-        String[] lines = code.split("\n"); // Split by statement terminator, which for GoLang is Enter
-        for (String line : lines) {
-            line = line.strip();
-            if (line.isEmpty()) continue;
+import java.util.*;
 
-            // Handle variable assignment
-            if (line.contains(":=")) {
-                handleAssignment(line);
-            }
-            // Handle print statements
-            else if (line.startsWith("Println")) {
-                handlePrintln(line);
+public class MinimalInterpreter {
+
+    //    public static Map<String, Integer> ifVariables = new HashMap<>(); May need later
+    static boolean nextLine = true;
+
+    public static void eval(String code) {
+        String[] lines = code.split("\n");
+        for (String line : lines) {
+            line = line.trim();
+            if(nextLine) {
+
+                if (line.isEmpty()) continue;
+
+                if (line.contains(":=")) {
+                    Variables.assign(line);
+                }
+                if (line.startsWith("print")) {
+                    handlePrint(line);
+                }
+                if (line.contains("for")) {
+                    handleLoop(line);
+                }
+                if (line.contains("if")) {
+                    handleIf(line);
+                }
+//                if (line.contains("return")) {
+//                    handleReturn(line);          *Work in Progress*
+//                }
             }
         }
     }
 
-    public void handlePrintln(String line) {
-        //Any operation with Variables and Numbers works in Println() too.
-        String printed = line.substring(line.indexOf('(') + 1, line.indexOf(')')).strip();
-        if (printed.isEmpty()) {
-            System.out.println(); //If it's empty just type nothing
+//    private static void handleReturn(String line) {
+//        String  returnVal = line.substring(line.indexOf("return")+6).trim();
+//        boolean retBool;
+//        if (returnVal == "false"){
+//            retBool = false;                                                  *Work in Progress*
+//        }
+//        if (returnVal == "true"){
+//            retBool = true;
+//        }
+//    }
+
+    public static void handlePrint(String line) {
+        String varName = line.substring(line.indexOf('(') + 1, line.indexOf(')')).trim();
+        Integer value = Variables.VarInt.get(varName);
+        if (value != null) {
+            System.out.print(value);
         } else {
-            if (variables.containsKey(printed)) {
-                System.out.println(variables.get(printed) + "\n"); // If it is only Variable, we print it's value
-            } else {
-                try {
-                    int result = arithmetic(printed); //If it is Variable + Number, we call methods again.
-                    System.out.println(result + "\n");
-                } catch (NumberFormatException e) {
-                    System.out.println("Error: Invalid number format\n"); //All are catches for exceptions
-                } catch (Exception e) {                                   //i.e. division by 0 and etc.
-                    System.out.println("Error: " + e.getMessage() + "\n");
+            System.out.print("Variable " + varName + " is not defined.");
+        }
+    }
+    static void handlePrintln(String line) {
+        String varName = line.substring(line.indexOf('(') + 1, line.indexOf(')')).trim();
+        Integer value = Variables.VarInt.get(varName);
+        if (value != null) {
+            System.out.println(value);
+        } else {
+            System.out.println("Variable " + varName + " is not defined.");
+        }
+    }
+
+    public static void handleLoop(String line) {
+        String[] parts = line.split(" ");
+        String loopVar = parts[1].trim();
+        if (InputScanner.checkInt(parts[3].replace(';', ' ').trim())) {
+            int start = Integer.parseInt(parts[3].replace(';', ' ').trim());
+            int end = Variables.VarInt.get(parts[6].replace(';', ' ').trim());
+
+            int sum = Variables.VarInt.get("sum");
+
+            for (int i = start; i <= end; i++) {
+                sum += i;
+            }
+            Variables.VarInt.replace("sum", sum);
+        }
+    }
+
+    public static void handleIf(String line) {
+        String Line = line.substring(line.indexOf("if")+2, line.lastIndexOf("{")).trim();
+        List<String> parts = new ArrayList<>(List.of(Line.split(" ")));
+        int value = 0;
+
+        boolean ifStatement = (Line.contains("{"));
+
+        String ifLine = Line.substring(Line.indexOf("if")+1, Line.indexOf("{")+1);
+
+        List<String > ifParts = new ArrayList<>(List.of(ifLine.split(" ")));
+
+        String ifVar = ifParts.get(0).trim();
+        String  operator = "";
+        int leftBool = 0;
+        int rightBool = 0;
+        boolean leftint = false, rightint = false;
+
+        if (Line.contains("<")) {
+            operator = "<";
+            if (InputScanner.DigitCounter(parts.get(0)) > 0 && InputScanner.DigitCounter(parts.get(2)) > 0) {
+                leftBool = Integer.parseInt(parts.get(0));
+                leftint = true;
+                boolean istrue = leftBool < rightBool;
+            } else if (InputScanner.DigitCounter(parts.get(0)) == 0 && InputScanner.DigitCounter(parts.get(2)) > 0){
+
+                leftBool = Variables.VarInt.get(parts.get(0));
+
+                boolean istrue = leftBool < rightBool;
+                if(istrue){
+                    if (leftBool<rightBool){
+                        nextLine = true;
+                    }else{ nextLine = false;}
                 }
             }
         }
+        if(InputScanner.DigitCounter(parts.get(2))>0){
+            rightBool = Integer.parseInt(parts.get(2));
+            rightint = true;
+        }else{
+            System.out.println("right:" + parts.get(2));
+        }
+        if(leftint && rightint && leftBool<rightBool){System.out.println(leftBool + "<" + rightBool);}
+
+        else if (Line.contains(">")) {
+            operator = ">";
+        } else if (Line.contains("==")) {
+            operator = "==";
+        }
+
+        if (InputScanner.checkInt(ifParts.get(0).replace(';', ' ').trim()) && Line.contains(":=")) {
+            int start = Integer.parseInt(ifParts.get(0).replace(';', ' ').trim());
+            int end = Variables.VarInt.get(ifParts.get(0).replace(';', ' ').trim());
+
+            int sum = Variables.VarInt.get("sum");
+
+            for (int i = start; i <= end; i++) {
+                sum += i;
+            }
+            Variables.VarInt.replace("sum", sum);
+        }
+
     }
-
-
-    public static void main(String[] args) {
-        MinimalInterpreter interpreter = new MinimalInterpreter();
-        
-        String program = """
-            n := 2
-            sum := 2 + n
-            Println(3)
-        """;
-
-        interpreter.eval(program);
+    public static void handleOr(String line) {
+        String orLine = line.substring(line.indexOf("||")+2).trim();
     }
 }
+
