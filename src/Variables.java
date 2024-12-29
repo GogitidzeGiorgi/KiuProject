@@ -23,9 +23,9 @@ public class Variables {
         }
 
         for (String line : Lines) {
-            if (InputScanner.checkInt(code)) {
+            if (InputScanner.CheckInt(code)) {
                 Variables.Integer(line);
-            } else if (InputScanner.checkInt(code)) {
+            } else if (InputScanner.CheckBool(code)) {
                 Variables.Boolean(line);
             } else if (InputScanner.CheckString(code)) {
                 Variables.String(line);
@@ -40,17 +40,17 @@ public class Variables {
         } else {
             IntList = List.of(line.split(":="));
         }
-        if (InputScanner.checkInt(IntList.get(1))) {
+        if (InputScanner.CheckInt(IntList.get(1))) {
             if (VarString.containsKey(IntList.get(0).trim()) || VarBool.containsKey(IntList.get(0).trim())) {
                 System.out.println("Error: Another Variable is assigned to that name");
             } else {
-                if (!InputScanner.checkNotInt(IntList.get(1).trim()) && !reassign) {
+                if (!InputScanner.NotANumber(IntList.get(1).trim()) && !reassign) {
                     if (VarInt.containsKey(IntList.get(0).trim())) {
                         System.out.println("Error: no new variables on left side of :=");
                     } else {
                         VarInt.put(IntList.get(0).trim(), Integer.valueOf(IntList.get(1).trim()));
                     }
-                } else if (!InputScanner.checkNotInt(IntList.get(1).trim()) && reassign) {
+                } else if (!InputScanner.NotANumber(IntList.get(1).trim()) && reassign) {
                     VarInt.put(IntList.get(0).trim(), Integer.valueOf(IntList.get(1).trim()));
 
                 }
@@ -83,12 +83,11 @@ public class Variables {
     private static void Boolean(String line) {
         List<String> BoolList = new ArrayList<>();
         if (reassign) {
-
             BoolList = List.of(line.split("="));
         } else {
             BoolList = List.of(line.split(":="));
         }
-        if (InputScanner.checkInt(BoolList.get(1))) {
+        if (InputScanner.CheckBool(BoolList.get(1))) {
             if (VarString.containsKey(BoolList.get(0).trim()) || VarInt.containsKey(BoolList.get(0).trim())) {
                 System.out.println("Error: Another Variable is assigned to that name");
             } else {
