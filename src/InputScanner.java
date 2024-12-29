@@ -1,5 +1,5 @@
 
-public class InputCounter {
+public class InputScanner {
     public static boolean checkInt0, checkInt1, checkString=false;
     public static int WordCounter(String program) {
         String assign = ":=";
