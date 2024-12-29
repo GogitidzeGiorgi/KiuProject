@@ -45,12 +45,21 @@ public class MinimalInterpreter {
 
     public static void handlePrint(String line) {
         String varName = line.substring(line.indexOf('(') + 1, line.indexOf(')')).trim();
-        Integer value = Variables.VarInt.get(varName);
-        if (value != null) {
-            System.out.print(value);
-        } else {
-            System.out.print("Variable " + varName + " is not defined.");
+
+        if(Variables.VarInt.containsKey(varName)){
+            System.out.println("Program Output:"+Variables.VarInt.get(varName));
+        }else if(Variables.VarBool.containsKey(varName)){
+            System.out.println("Program Output:"+Variables.VarBool.get(varName));
+        }else if(Variables.VarString.containsKey(varName)){
+            System.out.println("Program Output:"+Variables.VarString.get(varName));
         }
+
+//        Integer value = Variables.VarInt.get(varName);
+//        if (value != null) {
+//            System.out.print(value);
+//        } else {
+//            System.out.println("Variable " + varName + " is not defined.");
+//        }
     }
     static void handlePrintln(String line) {
         String varName = line.substring(line.indexOf('(') + 1, line.indexOf(')')).trim();
@@ -63,19 +72,19 @@ public class MinimalInterpreter {
     }
 
     public static void handleLoop(String line) {
-        String[] parts = line.split(" ");
-        String loopVar = parts[1].trim();
-        if (InputScanner.checkInt(parts[3].replace(';', ' ').trim())) {
-            int start = Integer.parseInt(parts[3].replace(';', ' ').trim());
-            int end = Variables.VarInt.get(parts[6].replace(';', ' ').trim());
-
-            int sum = Variables.VarInt.get("sum");
-
-            for (int i = start; i <= end; i++) {
-                sum += i;
-            }
-            Variables.VarInt.replace("sum", sum);
-        }
+//        String[] parts = line.split(" ");
+//        String loopVar = parts[1].trim();
+//        if (InputScanner.CheckInt(parts[3].replace(';', ' ').trim())) {
+//            int start = Integer.parseInt(parts[3].replace(';', ' ').trim());
+//            int end = Variables.VarInt.get(parts[6].replace(';', ' ').trim());
+//
+//            int sum = Variables.VarInt.get("sum");
+//
+//            for (int i = start; i <= end; i++) {
+//                sum += i;
+//            }
+//            Variables.VarInt.replace("sum", sum);
+//        }
     }
 
     public static void handleIf(String line) {
@@ -103,8 +112,10 @@ public class MinimalInterpreter {
                 boolean istrue = leftBool < rightBool;
             } else if (InputScanner.DigitCounter(parts.get(0)) == 0 && InputScanner.DigitCounter(parts.get(2)) > 0){
 
-                leftBool = Variables.VarInt.get(parts.get(0));
-
+               if(Variables.VarInt.get(parts.get(0))==null) {
+                   leftBool = Variables.VarInt.get(parts.get(0));
+                   System.out.println("NullPointerException");;
+               }
                 boolean istrue = leftBool < rightBool;
                 if(istrue){
                     if (leftBool<rightBool){
@@ -127,7 +138,7 @@ public class MinimalInterpreter {
             operator = "==";
         }
 
-        if (InputScanner.checkInt(ifParts.get(0).replace(';', ' ').trim()) && Line.contains(":=")) {
+        if (InputScanner.CheckInt(ifParts.get(0).replace(';', ' ').trim()) && Line.contains(":=")) {
             int start = Integer.parseInt(ifParts.get(0).replace(';', ' ').trim());
             int end = Variables.VarInt.get(ifParts.get(0).replace(';', ' ').trim());
 

@@ -1,19 +1,12 @@
+import java.util.ArrayList;
+import java.util.List;
 
 public class InputScanner {
-    public static boolean checkInt0, checkInt1, checkString=false;
-    public static int WordCounter(String program) {
-        String assign = ":=";
-        int index = 0;
-        int count = 0;
-        while (true) {
-            int pos = program.indexOf(assign, index);
-            if (pos < 0) break;
-            count++;
-            index = pos + 1;
-        }
-        return count;
-    } /// Never used
-    public static boolean checkInt(String code){
+
+    public static boolean checkInt0, checkInt1, checkString = false;
+    public static List<String> CheckedInt = new ArrayList<>();
+
+    public static boolean CheckInt(String code) {
         checkInt1 = false;
         for (char c : code.toCharArray()) {
             if (Character.isDigit(c)) {
@@ -22,17 +15,6 @@ public class InputScanner {
         }
         return checkInt1;
     }
-    public static boolean checkNotInt(String code){
-        boolean checkInt1 = false;
-        System.out.println(code.toCharArray());
-        for (char c : code.toCharArray()) {
-            if (!Character.isDigit(c) && c!='-') {
-                checkInt1 = true;
-            }
-        }
-        return checkInt1;
-    }
-
     public static int DigitCounter(String program) {
 
         int DigitCount = 0;
@@ -46,44 +28,38 @@ public class InputScanner {
         return DigitCount;
     }
 
-    public static Boolean CheckString(String program) {
-        int StringIndex = 0;
-        int StringCount = 0;
-        Character quoteChar = '\"';
-
-        for (Character c : program.toCharArray()) {
-            if (c.equals(quoteChar)) {
-                checkString=true;
+    public static boolean NotANumber(String code) {
+        boolean checkInt1 = false;
+        for (char c : code.toCharArray()) {
+            if (!Character.isDigit(c) && c != '-') {
+                checkInt1 = true;
             }
         }
-        String S_assign2 = "\"";
+        return checkInt1;
+    }
 
-        while (true) {
-            int pos = program.indexOf(S_assign2, StringIndex);
-            if (pos < 0) break;
-            StringCount++;
-            StringIndex = pos + 1;
+    public static Boolean CheckString(String program) {
+        int StringIndex = 0;
+        Character quoteChar = '\"';
+        for (Character c : program.toCharArray()) {
+            if (c.equals(quoteChar)) {
+                checkString = true;
+            }
         }
         return checkString;
     }
-//    public static int StringCounter(String program) {
-//        int StringIndex = 0;
-//        int StringCount = 0;
-//        Character quoteChar = '\"';
-//
-//        for (Character c : program.toCharArray()) {
-//            if (c.equals(quoteChar)) {
-//                checkString=true;
-//            }
-//        }
-//        String S_assign2 = "\"";
-//
-//        while (true) {
-//            int pos = program.indexOf(S_assign2, StringIndex);
-//            if (pos < 0) break;
-//            StringCount++;
-//            StringIndex = pos + 1;
-//        }
-//        return StringCount/2;
-//    }
+
+    public static boolean CheckVarInt(String code) {
+        for (String c : Variables.VarInt.keySet()) {
+            if (Variables.VarInt.containsKey(code) && !CheckedInt.contains(c)) {
+                CheckedInt.add(c);
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public static boolean CheckBool(String code) {
+        return code.contains("true") || code.contains("false");
+    }
 }

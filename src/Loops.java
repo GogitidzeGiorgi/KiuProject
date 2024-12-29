@@ -1,15 +1,15 @@
 public class Loops {
     static void handleWhileLoop(String line) {
-        int reversed= Variables.variables.get("reversed");
-        int n = Variables.variables.get("n");
+        int reversed= Variables.VarInt.get("reversed");
+        int n = Variables.VarInt.get("n");
 
         while(n != 0){
             int digit = n%10;
             reversed= reversed*10 + digit;
             n /= 10;
         }
-        Variables.variables.replace("n", n);
-        Variables.variables.replace("reversed", reversed);
+        Variables.VarInt.replace("n", n);
+        Variables.VarInt.replace("reversed", reversed);
     }
 
     static void handleForLoop(int startIndex, String[] lines) {
@@ -21,13 +21,13 @@ public class Loops {
         String increment = headerParts[2].trim();
 
         // Handle initialization
-        Variables.handleAssignment(initialization);
+        Variables.assign(initialization);
 
         // Extract loop variable
         String loopVar = initialization.split(":=")[0].trim();
 
         // Ensure the loop variable is initialized correctly
-        if (!Variables.variables.containsKey(loopVar)) {
+        if (!Variables.VarInt.containsKey(loopVar)) {
             throw new IllegalStateException("Loop variable " + loopVar + " is not initialized.");
         }
 
@@ -39,7 +39,7 @@ public class Loops {
         if(conditionParts[2].matches("\\d+")){
             endPoint = Integer.parseInt(conditionParts[2]);
         }else {
-            endPoint = Variables.variables.get(conditionParts[2]);
+            endPoint = Variables.VarInt.get(conditionParts[2]);
         }
 
 //        for (int i = startIndex; i < lines.length; i++) {
@@ -56,35 +56,35 @@ public class Loops {
 
         // generate correct loop
         if (condition.contains("<") && increment.contains("++")) {
-            for (int i = Variables.variables.get(loopVar); i < endPoint; i++) {
+            for (int i = Variables.VarInt.get(loopVar); i < endPoint; i++) {
                 Calculator.handleCalculation(lines[startIndex + 1]);
             }
         }else if(condition.contains("<") && increment.contains("--")){
-            for (int i = Variables.variables.get(loopVar); i < endPoint; i--) {
+            for (int i = Variables.VarInt.get(loopVar); i < endPoint; i--) {
                 Calculator.handleCalculation(lines[startIndex + 1]);
             }
         }else if (condition.contains(">") && increment.contains("++")) {
-            for (int i = Variables.variables.get(loopVar); i > endPoint; i++) {
+            for (int i = Variables.VarInt.get(loopVar); i > endPoint; i++) {
                 Calculator.handleCalculation(lines[startIndex + 1]);
             }
         }else if (condition.contains(">") && increment.contains("--")) {
-            for (int i = Variables.variables.get(loopVar); i > endPoint; i--) {
+            for (int i = Variables.VarInt.get(loopVar); i > endPoint; i--) {
                 Calculator.handleCalculation(lines[startIndex + 1]);
             }
         } else if (condition.contains(">=") && increment.contains("++")) {
-            for (int i = Variables.variables.get(loopVar); i >= endPoint; i++) {
+            for (int i = Variables.VarInt.get(loopVar); i >= endPoint; i++) {
                 Calculator.handleCalculation(lines[startIndex + 1]);
             }
         } else if (condition.contains(">=") && increment.contains("--")) {
-            for (int i = Variables.variables.get(loopVar); i >= endPoint; i--) {
+            for (int i = Variables.VarInt.get(loopVar); i >= endPoint; i--) {
                 Calculator.handleCalculation(lines[startIndex + 1]);
             }
         } else if (condition.contains("<=") && increment.contains("++")) {
-            for (int i = Variables.variables.get(loopVar); i <= endPoint; i++) {
+            for (int i = Variables.VarInt.get(loopVar); i <= endPoint; i++) {
                 Calculator.handleCalculation(lines[startIndex + 1]);
             }
         }else if (condition.contains("<=") && increment.contains("--")) {
-            for (int i = Variables.variables.get(loopVar); i <= endPoint; i--) {
+            for (int i = Variables.VarInt.get(loopVar); i <= endPoint; i--) {
                 Calculator.handleCalculation(lines[startIndex + 1]);
             }
         }
