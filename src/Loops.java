@@ -1,5 +1,12 @@
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
 public class Loops {
     static void handleWhileLoop(String line) {
+
+
         int reversed= Variables.VarInt.get("reversed");
         int n = Variables.VarInt.get("n");
 
@@ -13,28 +20,37 @@ public class Loops {
     }
 
     static void handleForLoop(int startIndex, String[] lines) {
+        boolean isLoop = true;
+        int endPoint = 0;
+
         // Parse the for-loop header
-        String initialization;
-        String condition;
-        String increment;
-        String loopHeader = lines[startIndex].trim();
+        String initialization; // i := 0
+        String condition; // i <= N
+        String increment; // i++
+        String loopHeader = lines[startIndex].strip();
         if(loopHeader.contains(";")) {
-            String[] headerParts = loopHeader.replace("for", "").trim().split(";");
-             initialization = headerParts[0].trim();
-             condition = headerParts[1].trim();
-             increment = headerParts[2].trim();
+            String[] headerParts = loopHeader.replace("for", "").strip().split(";");
+            initialization = headerParts[0].strip();
+            condition = headerParts[1].strip();
+            increment = headerParts[2].strip();
         }
         else {
-            String[] headerParts = loopHeader.replace("for", "").trim().split(" ");
-             initialization = headerParts[0].trim();
-             condition = headerParts[1].trim();
-             increment = headerParts[2].trim();
+            String[] headerParts = loopHeader.replace("for", "").strip().split(" ");
+            initialization = headerParts[0].strip();
+            condition = headerParts[1].strip();
+            increment = headerParts[2].strip();
         }
         // Handle initialization
         Variables.assign(initialization);
+        String[] loop = initialization.split(" ");
+        if(!InputScanner.NotANumber(loop[2])){
+            Variables.VarInt.put(loop[0], Integer.valueOf(loop[2]));
+        }else{
+            Variables.VarInt.get(loop[2]);
+        }
 
         // Extract loop variable
-        String loopVar = initialization.split(":=")[0].trim();
+        String loopVar = initialization.split(":=")[0].strip();
 
         // Ensure the loop variable is initialized correctly
         if (!Variables.VarInt.containsKey(loopVar)) {
@@ -43,7 +59,7 @@ public class Loops {
 
         String[] conditionParts = condition.split(" ");
 
-        int endPoint = 0;
+
         if(conditionParts.length>1) {
             // check if endpoint is variable or number
             if (conditionParts[2].matches("\\d+")) {
@@ -52,68 +68,61 @@ public class Loops {
                 endPoint = Variables.VarInt.get(conditionParts[2]);
             }
         }
-//        for (int i = startIndex; i < lines.length; i++) {
-//                String line = lines[i].trim();
-//                if (line.equals("}")) {
-//                    break; // Exit when the loop body ends
-//                }
-//
-//                // Only pass arithmetic expressions to handleArithmetic (e.g., sum += i)
-//                if (line.contains("+") || line.contains("-") || line.contains("*") || line.contains("/")) {
-//                    eval(line); // Call eval to process the arithmetic expression
-//                }
-//            }
-
-        // generate correct loop
-        if (condition.contains("<") && increment.contains("++")) {
-            for (int i = Variables.VarInt.get(loopVar); i < endPoint; i++) {
-                Calculator.handleCalculation(lines[startIndex + 1]);
+        int lineCount = -1;
+        for (int i = startIndex + 1; i < lines.length; i++) {
+            String line = lines[i].strip(); // \n
+            if (line.contains("}")) {
+                isLoop = false;
+                break;
             }
-        }else if(condition.contains("<") && increment.contains("--")){
-            for (int i = Variables.VarInt.get(loopVar); i < endPoint; i--) {
-                Calculator.handleCalculation(lines[startIndex + 1]);
-            }
-        }else if (condition.contains(">") && increment.contains("++")) {
-            for (int i = Variables.VarInt.get(loopVar); i > endPoint; i++) {
-                Calculator.handleCalculation(lines[startIndex + 1]);
-            }
-        }else if (condition.contains(">") && increment.contains("--")) {
-            for (int i = Variables.VarInt.get(loopVar); i > endPoint; i--) {
-                Calculator.handleCalculation(lines[startIndex + 1]);
-            }
-        } else if (condition.contains(">=") && increment.contains("++")) {
-            for (int i = Variables.VarInt.get(loopVar); i >= endPoint; i++) {
-                Calculator.handleCalculation(lines[startIndex + 1]);
-            }
-        } else if (condition.contains(">=") && increment.contains("--")) {
-            for (int i = Variables.VarInt.get(loopVar); i >= endPoint; i--) {
-                Calculator.handleCalculation(lines[startIndex + 1]);
-            }
-        } else if (condition.contains("<=") && increment.contains("++")) {
-            for (int i = Variables.VarInt.get(loopVar); i <= endPoint; i++) {
-                Calculator.handleCalculation(lines[startIndex + 1]);
-            }
-        }else if (condition.contains("<=") && increment.contains("--")) {
-            for (int i = Variables.VarInt.get(loopVar); i <= endPoint; i--) {
-                Calculator.handleCalculation(lines[startIndex + 1]);
-            }
+            loopi(line, condition, increment, loopVar, endPoint, loop); ///AFK
         }
 
-        // Loop execution (as long as the condition is true)
-//        while (evaluateCondition(condition)) {
-//            // Process the body of the loop (starting from the next line after the header)
-//            for (int i = startIndex; i < lines.length; i++) {
-//                String line = lines[i].trim();
-//                if (line.equals("}")) {
-//                    break; // Exit when the loop body ends
-//                }
-//
-//                // Only pass arithmetic expressions to handleArithmetic (e.g., sum += i)
-//                if (line.contains("+") || line.contains("-") || line.contains("*") || line.contains("/")) {
-//                    eval(line); // Call eval to process the arithmetic expression
-//                }
-//            }
-//        }
     }
+    static void loopi(String line, String condition, String increment, String loopVar, int endPoint, String[] loop) {
 
+        if (condition.contains("<=") && increment.contains("++")) {
+            for (int i = Variables.VarInt.get(loopVar); i <= endPoint; i++) {
+                Calculator.handleCalculation(line);
+                Variables.VarInt.replace(loop[0], Variables.VarInt.get(loop[0]) +1);
+            }
+        }else if(condition.contains("<=") && increment.contains("--")){
+            for (int i = Variables.VarInt.get(loopVar); i <= endPoint; i--) {
+                Calculator.handleCalculation(line);
+                Variables.VarInt.replace(loop[0], Variables.VarInt.get(loop[0])- 1);
+            }
+        }else if (condition.contains(">=") && increment.contains("++")) {
+            for (int i = Variables.VarInt.get(loopVar); i >= endPoint; i++) {
+                Calculator.handleCalculation(line);
+                Variables.VarInt.replace(loop[0], Variables.VarInt.get(loop[0]) +1);
+            }
+        }else if (condition.contains(">=") && increment.contains("--")) {
+            for (int i = Variables.VarInt.get(loopVar); i >= endPoint; i--) {
+                Calculator.handleCalculation(line);
+                Variables.VarInt.replace(loop[0], Variables.VarInt.get(loop[0]) -1);
+            }
+        } else if (condition.contains(">") && increment.contains("++")) {
+            for (int i = Variables.VarInt.get(loopVar); i > endPoint; i++) {
+                Calculator.handleCalculation(line);
+                Variables.VarInt.replace(loop[0], Variables.VarInt.get(loop[0]) +1);
+            }
+        } else if (condition.contains(">") && increment.contains("--")) {
+            for (int i = Variables.VarInt.get(loopVar); i > endPoint; i--) {
+                Calculator.handleCalculation(line);
+                Variables.VarInt.replace(loop[0], Variables.VarInt.get(loop[0]) - 1);
+            }
+        } else if (condition.contains("<") && increment.contains("++")) {
+            for (int i = Variables.VarInt.get(loopVar); i < endPoint; i++) {
+                Calculator.handleCalculation(line);
+                Variables.VarInt.replace(loop[0], Variables.VarInt.get(loop[0]) +1);
+            }
+        }else if (condition.contains("<") && increment.contains("--")) {
+            for (int i = Variables.VarInt.get(loopVar); i < endPoint; i--) {
+                Calculator.handleCalculation(line);
+                Variables.VarInt.replace(loop[0], Variables.VarInt.get(loop[0]) - 1);
+            }
+
+        }
+        Variables.VarInt.replace("i", 0);
+    }
 }

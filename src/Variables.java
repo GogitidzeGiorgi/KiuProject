@@ -41,17 +41,19 @@ public class Variables {
             IntList = List.of(line.split(":="));
         }
         if (InputScanner.CheckInt(IntList.get(1))) {
-            if (VarString.containsKey(IntList.get(0).trim()) || VarBool.containsKey(IntList.get(0).trim())) {
+            if (VarString.containsKey(IntList.get(0).strip()) || VarBool.containsKey(IntList.get(0).strip())) {
                 System.out.println("Error: Another Variable is assigned to that name");
             } else {
-                if (!InputScanner.NotANumber(IntList.get(1).trim()) && !reassign) {
-                    if (VarInt.containsKey(IntList.get(0).trim())) {
-                        System.out.println("Error: no new variables on left side of :=");
+                if (!InputScanner.NotANumber(IntList.get(1).strip()) && !reassign) {
+                    if (VarInt.containsKey(IntList.get(0).strip())) {
+                        VarInt.put(IntList.get(0).strip(), Integer.valueOf(IntList.get(1).strip()));
+
+//                        System.out.println("Error: no new variables on left side of :=" + IntList.get(0).strip());
                     } else {
-                        VarInt.put(IntList.get(0).trim(), Integer.valueOf(IntList.get(1).trim()));
+                        VarInt.put(IntList.get(0).strip(), Integer.valueOf(IntList.get(1).strip()));
                     }
-                } else if (!InputScanner.NotANumber(IntList.get(1).trim()) && reassign) {
-                    VarInt.put(IntList.get(0).trim(), Integer.valueOf(IntList.get(1).trim()));
+                } else if (!InputScanner.NotANumber(IntList.get(1).strip()) && reassign) {
+                    VarInt.put(IntList.get(0).strip(), Integer.valueOf(IntList.get(1).strip()));
 
                 }
             }
@@ -66,16 +68,16 @@ public class Variables {
             StringList = List.of(line.split(":="));
         }
         if (InputScanner.CheckString(StringList.get(1))) {
-            if (VarInt.containsKey(StringList.get(0).trim())) {
-                System.out.println("Error: Another Variable is assigned to name:" + StringList.get(0).trim());
+            if (VarInt.containsKey(StringList.get(0).strip())) {
+                System.out.println("Error: Another Variable is assigned to name:" + StringList.get(0).strip());
             } else if (!reassign) {
-                if (VarString.containsKey(StringList.get(0).trim())) {
+                if (VarString.containsKey(StringList.get(0).strip())) {
                     System.out.println("Error: no new variables on left side of :=");
                 } else {
-                    VarString.put(StringList.get(0).trim(), StringList.get(1).trim());
+                    VarString.put(StringList.get(0).strip(), StringList.get(1).strip());
                 }
             }else{
-                VarString.put(StringList.get(0).trim(), StringList.get(1).trim());
+                VarString.put(StringList.get(0).strip(), StringList.get(1).strip());
             }
         }
     }
@@ -88,24 +90,24 @@ public class Variables {
             BoolList = List.of(line.split(":="));
         }
         if (InputScanner.CheckBool(BoolList.get(1))) {
-            if (VarString.containsKey(BoolList.get(0).trim()) || VarInt.containsKey(BoolList.get(0).trim())) {
+            if (VarString.containsKey(BoolList.get(0).strip()) || VarInt.containsKey(BoolList.get(0).strip())) {
                 System.out.println("Error: Another Variable is assigned to that name");
             } else {
                 if (!reassign) {
-                    if (VarBool.containsKey(BoolList.get(0).trim())) {
+                    if (VarBool.containsKey(BoolList.get(0).strip())) {
                         System.out.println("Error: no new variables on left side of :=");
                     } else {
                         if (line.contains("true")) {
-                            VarBool.put(BoolList.get(0).trim(), true);
+                            VarBool.put(BoolList.get(0).strip(), true);
                         } else {
-                            VarBool.put(BoolList.get(0).trim(), false);
+                            VarBool.put(BoolList.get(0).strip(), false);
                         }
                     }
                 }else{
                     if (line.contains("true")) {
-                        VarBool.put(BoolList.get(0).trim(), true);
+                        VarBool.put(BoolList.get(0).strip(), true);
                     } else {
-                        VarBool.put(BoolList.get(0).trim(), false);
+                        VarBool.put(BoolList.get(0).strip(), false);
                     }
                 }
             }

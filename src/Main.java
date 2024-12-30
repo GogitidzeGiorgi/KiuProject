@@ -1,24 +1,21 @@
 public class Main {
     public static void main(String[] args) {
         String code = """
-                b := true
-                x := 12
-                c := "one"
-                
-                if x < 0 {
-                        b = false
-                    }
-                
-                    reversed := 0
-                    for x != 0 {
-                        reversed = reversed*10 + x%10
-                        x /= 10
-                    }
-                
-                    b = (x == reversed)
-                    print(b)
+                x := 0
+                N := 5
+                sum :=0
+                b := 2
+                for i := 0; i <= N; i++{
+                          sum += i
+                          x++
+                          b *= 2
+                     }
+                fmt.Println(x)
+                fmt.Println(N)
+                fmt.Println(sum)
+                fmt.Println(b)
                 """;
-        MinimalInterpreter.eval(code);
+        Interpreter.eval(code);
         System.out.println();
         System.out.println("*****");
         System.out.println("Integer Map: " + Variables.VarInt.entrySet());
