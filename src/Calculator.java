@@ -4,7 +4,7 @@ import java.util.Map;
 public class Calculator {
     static Map<String, Integer> calcVariables = new HashMap<>();
 
-    static void handleCalculation(String line) throws ArithmeticException {
+    public static void handleCalculation(String line) throws ArithmeticException {
         String[] parts;
         String varName;
         String expression;
@@ -47,14 +47,14 @@ public class Calculator {
             value = calcVariables.getOrDefault(varName, 0) % divisor;
         } else {
             // Handle standard assignments and expressions
-            parts = line.split(":=");
-            varName = parts[0].trim();
-            expression = parts[1].trim();
-            value = evaluateExpression(expression);
+//            parts = line.split(":=");
+//            varName = parts[0].trim();
+//            expression = parts[1].trim();
+//            value = evaluateExpression(expression);
         }
 
         // Update the variable in the map
-        calcVariables.put(varName, value);
+//        calcVariables.put(varName, value);
     }
 
     static int evaluateExpression(String expression) {
@@ -85,7 +85,12 @@ public class Calculator {
 
             case '-':
                 String[] subNumbers = trimmedExpression.split("-");
-                value = Integer.parseInt(subNumbers[0]);
+                if(InputScanner.NotANumber(subNumbers[0]) && subNumbers[0] != null){
+                value = Integer.parseInt(subNumbers[0]);}else if(Variables.VarInt.get(subNumbers[0]) != null){
+                    value = Variables.VarInt.get(subNumbers[0]);
+                }else{
+                    System.out.println("Null");
+                }
                 for (int i = 1; i < subNumbers.length; i++) {
                     value -= Integer.parseInt(subNumbers[i]);
                 }

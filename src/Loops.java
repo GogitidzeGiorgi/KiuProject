@@ -14,12 +14,22 @@ public class Loops {
 
     static void handleForLoop(int startIndex, String[] lines) {
         // Parse the for-loop header
+        String initialization;
+        String condition;
+        String increment;
         String loopHeader = lines[startIndex].trim();
-        String[] headerParts = loopHeader.replace("for", "").trim().split(";");
-        String initialization = headerParts[0].trim();
-        String condition = headerParts[1].trim();
-        String increment = headerParts[2].trim();
-
+        if(loopHeader.contains(";")) {
+            String[] headerParts = loopHeader.replace("for", "").trim().split(";");
+             initialization = headerParts[0].trim();
+             condition = headerParts[1].trim();
+             increment = headerParts[2].trim();
+        }
+        else {
+            String[] headerParts = loopHeader.replace("for", "").trim().split(" ");
+             initialization = headerParts[0].trim();
+             condition = headerParts[1].trim();
+             increment = headerParts[2].trim();
+        }
         // Handle initialization
         Variables.assign(initialization);
 
@@ -34,14 +44,14 @@ public class Loops {
         String[] conditionParts = condition.split(" ");
 
         int endPoint = 0;
-
-        // check if endpoint is variable or number
-        if(conditionParts[2].matches("\\d+")){
-            endPoint = Integer.parseInt(conditionParts[2]);
-        }else {
-            endPoint = Variables.VarInt.get(conditionParts[2]);
+        if(conditionParts.length>1) {
+            // check if endpoint is variable or number
+            if (conditionParts[2].matches("\\d+")) {
+                endPoint = Integer.parseInt(conditionParts[2]);
+            } else {
+                endPoint = Variables.VarInt.get(conditionParts[2]);
+            }
         }
-
 //        for (int i = startIndex; i < lines.length; i++) {
 //                String line = lines[i].trim();
 //                if (line.equals("}")) {

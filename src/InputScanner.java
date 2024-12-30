@@ -40,6 +40,7 @@ public class InputScanner {
 
     public static Boolean CheckString(String program) {
         int StringIndex = 0;
+        checkString = false;
         Character quoteChar = '\"';
         for (Character c : program.toCharArray()) {
             if (c.equals(quoteChar)) {

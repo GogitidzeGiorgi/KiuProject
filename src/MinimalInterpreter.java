@@ -1,35 +1,56 @@
+import java.sql.SQLOutput;
 import java.util.*;
 
 public class MinimalInterpreter {
 
     //    public static Map<String, Integer> ifVariables = new HashMap<>(); May need later
     static boolean nextLine = true;
+    static boolean inIf = false;
 
     public static void eval(String code) {
         String[] lines = code.split("\n");
-        for (String line : lines) {
-            line = line.trim();
+        for (int i =0; i<lines.length; i++) {
+            lines[i] = lines[i].trim();
             if(nextLine) {
 
-                if (line.isEmpty()) continue;
+                if (lines[i].isEmpty()) continue;
+//                if(inIf &&line.contains("=")){
+//                    Variables.assign(line);
+//                }
 
-                if (line.contains(":=")) {
-                    Variables.assign(line);
+                if (lines[i].contains("=")) {
+                    if(!(lines[i].contains("*")||lines[i].contains("+")||lines[i].contains("/"))) {
+                        Variables.assign(lines[i]);
+                    }else {
+                        Calculator.handleCalculation(lines[i]);
+                    }
                 }
-                if (line.startsWith("print")) {
-                    handlePrint(line);
+                if (lines[i].startsWith("print")) {
+                    handlePrint(lines[i]);
                 }
-                if (line.contains("for")) {
-                    handleLoop(line);
+                if (lines[i].contains("for")) {
+                    String forooo = lines[i];
+                    String[] arr = new String[0];
+                    for (int j=i; !lines[j].contains("}") && j< lines.length; j++ ){
+                        Loops.handleForLoop(i, lines);
+                        }
+                    }
+
+                if (lines[i].contains("if")) {
+                    handleIf(lines[i]);
                 }
-                if (line.contains("if")) {
-                    handleIf(line);
+                if (lines[i].contains("b = (x == reversed)")) {
+                    handleBool(lines[i]);
                 }
 //                if (line.contains("return")) {
 //                    handleReturn(line);          *Work in Progress*
 //                }
-            }
+            }else{nextLine = true;}
         }
+    }
+
+    private static void handleBool(String line) {
+
     }
 
 //    private static void handleReturn(String line) {
@@ -71,27 +92,20 @@ public class MinimalInterpreter {
         }
     }
 
-    public static void handleLoop(String line) {
-//        String[] parts = line.split(" ");
-//        String loopVar = parts[1].trim();
-//        if (InputScanner.CheckInt(parts[3].replace(';', ' ').trim())) {
-//            int start = Integer.parseInt(parts[3].replace(';', ' ').trim());
-//            int end = Variables.VarInt.get(parts[6].replace(';', ' ').trim());
-//
-//            int sum = Variables.VarInt.get("sum");
-//
-//            for (int i = start; i <= end; i++) {
-//                sum += i;
-//            }
-//            Variables.VarInt.replace("sum", sum);
-//        }
+    public static void handleFor(String line) {
+        List<String> lines = new ArrayList<>(List.of(line.split(" ")));
+//        Variables.VarBool.get(line.indexOf(lines(0))) = (x == reversed);
+
+
     }
 
     public static void handleIf(String line) {
+        nextLine = false;
         String Line = line.substring(line.indexOf("if")+2, line.lastIndexOf("{")).trim();
         List<String> parts = new ArrayList<>(List.of(Line.split(" ")));
         int value = 0;
-
+//        inIf = true;
+//        if(Line.contains("}")){inIf = false;}
         boolean ifStatement = (Line.contains("{"));
 
         String ifLine = Line.substring(Line.indexOf("if")+1, Line.indexOf("{")+1);
@@ -111,18 +125,14 @@ public class MinimalInterpreter {
                 leftint = true;
                 boolean istrue = leftBool < rightBool;
             } else if (InputScanner.DigitCounter(parts.get(0)) == 0 && InputScanner.DigitCounter(parts.get(2)) > 0){
-
-               if(Variables.VarInt.get(parts.get(0))==null) {
+               if(Variables.VarInt.get(parts.get(0))!=null) {
                    leftBool = Variables.VarInt.get(parts.get(0));
-                   System.out.println("NullPointerException");;
-               }
+               }else{System.out.println("NullPointerException");}
                 boolean istrue = leftBool < rightBool;
                 if(istrue){
-                    if (leftBool<rightBool){
-                        nextLine = true;
-                    }else{ nextLine = false;}
-                }
-            }
+                    System.out.println("true");nextLine = true;
+                    }else{nextLine = false;}
+                }System.out.println("false nextLine:"+nextLine);
         }
         if(InputScanner.DigitCounter(parts.get(2))>0){
             rightBool = Integer.parseInt(parts.get(2));

@@ -2,7 +2,7 @@ public class Main {
     public static void main(String[] args) {
         String code = """
                 b := true
-                x := 121
+                x := 12
                 c := "one"
                 
                 if x < 0 {
@@ -26,7 +26,7 @@ public class Main {
         System.out.println("Boolean Map: " + Variables.VarBool.entrySet());
         System.out.println("CheckedInt:" + InputScanner.CheckedInt);
         System.out.println("*****");
-
+/// Try to make it work in calculator
 
     }
 }
