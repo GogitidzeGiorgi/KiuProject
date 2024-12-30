@@ -10,4 +10,4 @@ for num != 0 {
    }
    num /= 10
 }
-Println(largestDigit)
+fmt.Println(largestDigit)

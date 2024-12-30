@@ -31,7 +31,16 @@ public class InputScanner {
     public static boolean NotANumber(String code) {
         boolean checkInt1 = false;
         for (char c : code.toCharArray()) {
-            if (!Character.isDigit(c) && c != '-') {
+            if (!(Character.isDigit(c) || c == '-' || Variables.VarInt.containsKey(code))){
+                checkInt1 = true;
+            }
+        }
+        return checkInt1;
+    }
+    public static boolean NotADigit(String code) {
+        boolean checkInt1 = false;
+        for (char c : code.toCharArray()) {
+            if (!(Character.isDigit(c) || c == '-')){
                 checkInt1 = true;
             }
         }

@@ -13,7 +13,7 @@ if num <= 1 {
 }
 
 if isPrime {
-   Println("%d is prime.", num)
+   fmt.Println("%d is prime.", num)
 } else {
-   Println("%d is not prime.", num)
+   fmt.Println("%d is not prime.", num)
 }

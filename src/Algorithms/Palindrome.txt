@@ -9,7 +9,7 @@ for num != 0 {
 
 	
 if original == reversed {
-   Println("%d is palindrome.", original)
+   fmt.Println("%d is palindrome.", original)
 } else {
-   Println("%d is not palindrome.", original)
+   fmt.Println("%d is not palindrome.", original)
 }

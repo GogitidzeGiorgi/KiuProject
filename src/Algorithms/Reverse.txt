@@ -6,4 +6,4 @@ for num != 0 {
    reversed = reversed*10 + digit 
    num /= 10                  
 }
-Println(reversed)
+fmt.Println(reversed)

@@ -8,4 +8,4 @@ for num !=0 {
    sum += digit
    num /= 10
 }
-Println(sum)
+fmt.Println(sum)

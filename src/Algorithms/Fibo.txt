@@ -1,9 +1,9 @@
 n := 10
 if n =	= 0 {
-   Println(n)
+   fmt.Println(n)
 }
 if n == 1 {
-   Println(n)
+   fmt.Println(n)
 }
 if n > 1 {
    a, b := 0, 1
@@ -13,5 +13,5 @@ if n > 1 {
       a = b
       b = fib
    }
-   Println(fib)
+  fmt. Println(fib)
 }

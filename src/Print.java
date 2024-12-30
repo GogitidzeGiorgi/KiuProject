@@ -1,6 +1,6 @@
 public class Print {
     static void handlePrint(String line) {
-        String varName = line.substring(line.indexOf('(') + 1, line.indexOf(')')).trim();
+        String varName = line.substring(line.indexOf('(') + 1, line.indexOf(')')).strip();
         Integer value = Variables.VarInt.get(varName);
         if (value != null) {
             System.out.println(value);
