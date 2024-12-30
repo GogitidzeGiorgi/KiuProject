@@ -12,11 +12,7 @@ public class Variables extends Calculator {
 
 
     public static void assign(String code) {
-        if (code.contains(":=")) {
-            reassign = false;
-        } else {
-            reassign = true;
-        }
+        reassign = !code.contains(":=");
 
         if (reassign) {
             IntList = List.of(code.split("="));
@@ -24,8 +20,8 @@ public class Variables extends Calculator {
             IntList = List.of(code.split(":="));
         } //
        String line =  code.replaceAll(" ", "");
-            if (!InputScanner.NotANumber(IntList.get(1).strip()) && !IntList.get(0).trim().contains(" ") && !IntList.get(0).isEmpty()) {   // [b] [num]
-                Variables.Integer(line);
+            if (!InputScanner.NotANumber(IntList.get(1).strip()) && !IntList.get(0).trim().contains(" ") && !IntList.get(0).trim().isEmpty()) {   // [b] [num]
+                Variables.Integer();
             } else if (InputScanner.CheckBool(line)) {
                 Variables.Boolean(line);
             } else if (InputScanner.CheckString(line)) {
@@ -33,7 +29,7 @@ public class Variables extends Calculator {
             }
       }
 
-    private static void Integer(String line) {
+    private static void Integer() {
                        // true                                  // true                                      true                true                                true
             if (!InputScanner.NotANumber(IntList.get(1).trim()) && !IntList.get(0).contains("-") && (!(IntList.get(1).contains("+"))  &&  !(IntList.get(1).contains("*")  && !(IntList.get(1).contains("/"))))) {
                                  // If [a] is any other String, for not Integer value
@@ -60,7 +56,7 @@ public class Variables extends Calculator {
 
 
     private static void String(String line) {
-        List<String> StringList = new ArrayList<>();
+        List<String> StringList ;
         if (reassign) {
             StringList = List.of(line.split("="));
         } else {
@@ -83,7 +79,7 @@ public class Variables extends Calculator {
     }
 
     private static void Boolean(String line) {
-        List<String> BoolList = new ArrayList<>();
+        List<String> BoolList;
         if (reassign) {
             BoolList = List.of(line.split("="));
         } else {
