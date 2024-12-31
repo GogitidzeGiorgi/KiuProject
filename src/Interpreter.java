@@ -8,7 +8,7 @@ public class Interpreter extends Calculator {
         String[] lines = code.split("\n");
         for (int i = 0; i < lines.length; i++) {
             lines[i] = lines[i].trim();
-            if(lines[i].contains("}")){
+            if(!lines[i].contains("}")&&skipNextLine){
                 skipNextLine = false;
                 continue;
             }
@@ -24,11 +24,13 @@ public class Interpreter extends Calculator {
 //            }
 
 
+            if(lines[i].contains("if")){
+                If.handleIf(lines[i]);
+            }
             if(lines[i].contains("for") && lines[i].contains("++") || (lines[i].contains("for") && lines[i].contains("--"))){
-                skipNextLine = true;
                 Loops.handleForLoop(i, lines);
             }else if(lines[i].contains("for")){
-                skipNextLine = true;
+
                 Loops.handleWhileLoop(i, lines);
             }else if(lines[i].contains("+=")||lines[i].contains("-=")||lines[i].contains("*=")||lines[i].contains("/=")
                     ||lines[i].contains("%=")) {

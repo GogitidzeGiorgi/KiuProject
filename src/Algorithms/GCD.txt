@@ -1,7 +1,9 @@
 a := 28
 b := 21
+c := 0
 for b != 0 {
-  a = b
-  b = a % b
+    c = b
+    b = a%b
+    a = c
 }
-fmt.Println(a)
+fmt.Println(b)

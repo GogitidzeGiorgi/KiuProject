@@ -2,12 +2,13 @@ public class Main {
     public static void main(String[] args) {
         String code = """
                 a := 28
-                b := 21
-                for b != 0 {
-                  a = b
-                  b = a % b
+                b := 2
+                if a != 2 {
+                   fmt.Println(a)
+                }else{
+                   fmt.Println(b)
                 }
-                fmt.Println(a)""";
+                """;
         Interpreter.eval(code);
         System.out.println();
         System.out.println("*****");
@@ -16,7 +17,5 @@ public class Main {
         System.out.println("Boolean Map: " + Variables.VarBool.entrySet());
         System.out.println("CheckedInt:" + InputScanner.CheckedInt);
         System.out.println("*****");
-
     }
-
 }

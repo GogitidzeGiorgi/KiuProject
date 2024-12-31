@@ -121,6 +121,7 @@ public class Calculator {
         }
         // a = 5 + 2;
         //  5 + 2
+
         String stripped = expression.replaceAll(" ", "");
 
         // Determine the operator present in the expression
@@ -196,7 +197,8 @@ public class Calculator {
                     if (moder == 0) {
                         System.out.println(("Modulo by zero"));
                     }else{
-                        value %= moder;}
+                        value %= moder;
+                    }
                 }
                 break;
 
@@ -216,17 +218,18 @@ public class Calculator {
     }
 
     public static Integer getValue(String varOrNum) {
+        if (varOrNum == null || varOrNum.isEmpty()) {
+            return null; // or throw an IllegalArgumentException
+        }
         if (Variables.VarInt.containsKey(varOrNum)) {
             return Variables.VarInt.get(varOrNum);
-        }else if (!InputScanner.NotADigit(varOrNum) && !varOrNum.isEmpty()) {
-            return Integer.parseInt((varOrNum));
-        } else {
-            return null;
         }
-
-        //If we call getValue method from String or String[]'s every value(variable or Integer) it checks it.
-        //If String appears to be variable, which was created and stored into Map-key before, it gets it's value
-        //If it was regular String, it is Parsed into Integer
+        try {
+            return Integer.parseInt(varOrNum);
+        } catch (NumberFormatException e) {
+            // Handle the case where varOrNum is not a valid integer
+            return null; // or throw an IllegalArgumentException
+        }
     }
 }
 
