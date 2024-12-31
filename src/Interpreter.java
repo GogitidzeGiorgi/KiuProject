@@ -11,8 +11,14 @@ public class Interpreter extends Calculator {
             if(!lines[i].contains("}")&&skipNextLine){
                 skipNextLine = false;
                 continue;
+            } if(lines[i].contains("else")&&If.skipElse){
+                skipNextLine = true;
+                continue;
             }
             if (lines[i].isEmpty()) continue;
+            if(lines[i].contains("break")){
+
+            }
 
 //            if (!If.nextLine){
 //                If.nextLine = true;
