@@ -20,12 +20,10 @@ public class Interpreter extends Calculator {
 
 
 
-            if(lines[i].contains("for")){
-//                    && lines[i].contains("++")) || (lines[i].contains("for") && lines[i].contains("--"))){
-//                Loops.handleForLoop(i, lines);
-//            }else if(lines[i].contains("for")){
-//                Loops.handleForLoop(lines[i].indexOf("for")+3, );
+            if(lines[i].contains("for") && lines[i].contains("++") || (lines[i].contains("for") && lines[i].contains("--"))){
                 Loops.handleForLoop(i, lines);
+            }else if(lines[i].contains("for")){
+                Loops.handleWhileLoop(i, lines);
             }
             if(lines[i].contains("+=")||lines[i].contains("-=")||lines[i].contains("*=")||lines[i].contains("/=")
                     ||lines[i].contains("%=")) {

@@ -1,21 +1,59 @@
 import java.util.*;
 
-public class Loops {
+public class Loops extends Calculator {
 
-    static void handleWhileLoop(String line) {
+    static void handleWhileLoop(int startIndex, String[] lines) {
+        // Extract the loop condition
+        String condition = lines[startIndex].replaceAll("for|\\{|}", "").trim();
+        String[] splittedCond = condition.split(" ");
 
-
-        int reversed = Variables.VarInt.get("reversed");
-        int n = Variables.VarInt.get("n");
-
-        while (n != 0) {
-            int digit = n % 10;
-            reversed = reversed * 10 + digit;
-            n /= 10;
+        if (splittedCond.length != 3) {
+            throw new IllegalArgumentException("Malformed loop condition: " + condition);
         }
-        Variables.VarInt.replace("n", n);
-        Variables.VarInt.replace("reversed", reversed);
+
+        // Extract the loop body
+        List<String> loopBody = new ArrayList<>();
+        for (int i = startIndex + 1; i < lines.length; i++) {
+            String line = lines[i].strip();
+            if (line.equals("}")) {
+                break;
+            }
+            loopBody.add(line);
+        }
+
+        String body = String.join("\n", loopBody);
+
+        // Parse the condition parts
+        String leftOperand = splittedCond[0];
+        String operator = splittedCond[1];
+        String rightOperand = splittedCond[2];
+
+        // Execute the loop
+        while (evaluateCondition(leftOperand, operator, rightOperand)) {
+            // Evaluate the body of the loop
+            Interpreter.eval(body);
+
+            // Update the condition variables
+            // (Assuming Interpreter.eval updates the variables correctly)
+        }
     }
+
+    // Helper method to evaluate the loop condition
+    private static boolean evaluateCondition(String left, String operator, String right) {
+        int leftValue = getValue(left);
+        int rightValue = getValue(right);
+
+        return switch (operator) {
+            case "==" -> leftValue == rightValue;
+            case "!=" -> leftValue != rightValue;
+            case ">" -> leftValue > rightValue;
+            case "<" -> leftValue < rightValue;
+            case ">=" -> leftValue >= rightValue;
+            case "<=" -> leftValue <= rightValue;
+            default -> throw new IllegalArgumentException("Unsupported operator: " + operator);
+        };
+    }
+
 
     static void handleForLoop(int startIndex, String[] lines) {
         int endPoint = 0;
@@ -79,10 +117,10 @@ public class Loops {
             loopBody.add(line);
         }
         String result = String.join("\n", loopBody);
-        loopi(result, condition, increment, loopVar, endPoint, InitializationArr);
+        loopi(result, condition, increment, loopVar, endPoint);
     }
 
-    static void loopi(String line, String condition, String increment, String loopVar, int endPoint, String[] InitializationArr) {
+    static void loopi(String line, String condition, String increment, String loopVar, int endPoint) {
         // Initialize the loop variable
         int currentValue = Variables.VarInt.get(loopVar);
 
@@ -100,7 +138,6 @@ public class Loops {
 
             // Update the variable in the map
             Variables.VarInt.put(loopVar, currentValue);
-//            Variables.VarInt.replace(InitializationArr[0], 0);
         }
     }
 
