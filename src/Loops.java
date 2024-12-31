@@ -4,12 +4,8 @@ public class Loops extends Calculator {
 
     static void handleWhileLoop(int startIndex, String[] lines) {
         // Extract the loop condition
-        String condition = lines[startIndex].replaceAll("for|\\{|}", "").trim();
+        String condition = lines[startIndex].replace("for", "").replace("{", "").trim();
         String[] splittedCond = condition.split(" ");
-
-        if (splittedCond.length != 3) {
-            throw new IllegalArgumentException("Malformed loop condition: " + condition);
-        }
 
         // Extract the loop body
         List<String> loopBody = new ArrayList<>();
@@ -20,21 +16,20 @@ public class Loops extends Calculator {
             }
             loopBody.add(line);
         }
+        // b != 0
 
         String body = String.join("\n", loopBody);
 
         // Parse the condition parts
-        String leftOperand = splittedCond[0];
-        String operator = splittedCond[1];
-        String rightOperand = splittedCond[2];
+        String leftOperand = splittedCond[0]; // b
+        String operator = splittedCond[1]; // !=
+        String rightOperand = splittedCond[2]; // 0
 
         // Execute the loop
         while (evaluateCondition(leftOperand, operator, rightOperand)) {
             // Evaluate the body of the loop
             Interpreter.eval(body);
 
-            // Update the condition variables
-            // (Assuming Interpreter.eval updates the variables correctly)
         }
     }
 
@@ -187,20 +182,5 @@ public class Loops extends Calculator {
 //        }
 //        return false;
 //    }
-    static void Shortloopi(String line,String condition) {
-        // Initialize the loop variable
 
-        // Loop until the condition is met
-        List<String> CondList = new ArrayList<>(List.of(condition.split(" ")));
-        String left = CondList.get(0);
-        String op = CondList.get(1);
-        String right = CondList.get(2);
-
-        while (evaluateCondition(left, op, right)) {
-            // Execute the line of code in the loop
-            Interpreter.eval(line);
-//            List condparts = new ArrayList<>(List.of((condition.split(" "))));
-
-        }
-    }
 }

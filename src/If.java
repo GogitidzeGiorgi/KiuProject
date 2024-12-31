@@ -2,10 +2,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class If {
-    public static boolean nextLine = true;
 
     public static void handleIf(String line) {
-        nextLine = false;
         String Line = line.substring(line.indexOf("if") + 2, line.lastIndexOf("{")).strip();
         List<String> parts = new ArrayList<>(List.of(Line.split(" ")));
         int value = 0;
@@ -24,48 +22,51 @@ public class If {
 
         if (Line.contains("<")) {
             operator = "<";
-            if (!InputScanner.NotANumber(parts.get(0)) && !InputScanner.NotANumber(parts.get(2))){
+            if (Calculator.getValue(parts.get(0)) !=null && Calculator.getValue(parts.get(2)) !=null ){
                 leftBool = Integer.parseInt(parts.get(0));
-                leftint = true;
+                rightBool = Integer.parseInt(parts.get(2));
                 boolean istrue = leftBool < rightBool;
-                System.out.println("istrue:" + istrue);
-            } else if (InputScanner.NotANumber(parts.get(0)) && InputScanner.NotANumber(parts.get(0))) {
-                if (Variables.VarInt.get(parts.get(0)) != null) {
-                    leftBool = Variables.VarInt.get(parts.get(0));
-                } else {
-                    System.out.println("NullPointerException");
-                }
-                boolean istrue = leftBool < rightBool;
-                if (istrue) {
-                    nextLine = true;
-                } else {
-                    nextLine = false;
-                }
-            }else if (InputScanner.DigitCounter(parts.get(0)) == 0 && InputScanner.DigitCounter(parts.get(2)) > 0) {
-                if (Variables.VarInt.get(parts.get(0)) != null) {
-                    leftBool = Variables.VarInt.get(parts.get(0));
-                } else {
-                    System.out.println("NullPointerException");
-                }
-                boolean istrue = leftBool < rightBool;
-                if (istrue) {
-                    nextLine = true;
-                } else {
-                    nextLine = false;
-                }
-            }else if (InputScanner.DigitCounter(parts.get(0)) == 0 && InputScanner.DigitCounter(parts.get(2)) > 0) {
-                if (Variables.VarInt.get(parts.get(0)) != null) {
-                    leftBool = Variables.VarInt.get(parts.get(0));
-                } else {
-                    System.out.println("NullPointerException");
-                }
-                boolean istrue = leftBool < rightBool;
-                if (istrue) {
-                    nextLine = true;
-                } else {
-                    nextLine = false;
-                }
+            } else {
+                System.out.println("Null in if");
+//            else if (InputScanner.NotANumber(parts.get(0)) && InputScanner.NotANumber(parts.get(0)))
             }
+//            {
+//                if (Variables.VarInt.get(parts.get(0)) != null) {
+//                    leftBool = Variables.VarInt.get(parts.get(0));
+//                } else {
+//                    System.out.println("NullPointerException");
+//                }
+//                boolean istrue = leftBool < rightBool;
+//                if (istrue) {
+//                    Interpreter.skipNextLine = false;
+//                } else {
+//                    Interpreter.skipNextLine = true;
+//                }
+//            }else if (InputScanner.DigitCounter(parts.get(0)) == 0 && InputScanner.DigitCounter(parts.get(2)) > 0) {
+//                if (Variables.VarInt.get(parts.get(0)) != null) {
+//                    leftBool = Variables.VarInt.get(parts.get(0));
+//                } else {
+//                    System.out.println("NullPointerException");
+//                }
+//                boolean istrue = leftBool < rightBool;
+//                if (istrue) {
+//                    Interpreter.skipNextLine = false;
+//                } else {
+//                    Interpreter.skipNextLine = true;
+//                }
+//            }else if (InputScanner.DigitCounter(parts.get(0)) == 0 && InputScanner.DigitCounter(parts.get(2)) > 0) {
+//                if (Variables.VarInt.get(parts.get(0)) != null) {
+//                    leftBool = Variables.VarInt.get(parts.get(0));
+//                } else {
+//                    System.out.println("NullPointerException");
+//                }
+//                boolean istrue = leftBool < rightBool;
+//                if (istrue) {
+//                    Interpreter.skipNextLine = false;
+//                } else {
+//                    Interpreter.skipNextLine = true;
+//                }
+//            }
 
         }
         if (InputScanner.DigitCounter(parts.get(2)) > 0) {

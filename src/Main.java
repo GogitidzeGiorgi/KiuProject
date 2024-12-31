@@ -7,8 +7,7 @@ public class Main {
                   a = b
                   b = a % b
                 }
-                fmt.Println(a)
-                """;
+                fmt.Println(a)""";
         Interpreter.eval(code);
         System.out.println();
         System.out.println("*****");
@@ -19,4 +18,5 @@ public class Main {
         System.out.println("*****");
 
     }
+
 }
