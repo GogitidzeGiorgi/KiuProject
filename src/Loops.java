@@ -38,22 +38,6 @@ public class Loops extends Calculator {
         }
     }
 
-    // Helper method to evaluate the loop condition
-    private static boolean evaluateCondition(String left, String operator, String right) {
-        int leftValue = getValue(left);
-        int rightValue = getValue(right);
-
-        return switch (operator) {
-            case "==" -> leftValue == rightValue;
-            case "!=" -> leftValue != rightValue;
-            case ">" -> leftValue > rightValue;
-            case "<" -> leftValue < rightValue;
-            case ">=" -> leftValue >= rightValue;
-            case "<=" -> leftValue <= rightValue;
-            default -> throw new IllegalArgumentException("Unsupported operator: " + operator);
-        };
-    }
-
 
     static void handleForLoop(int startIndex, String[] lines) {
         int endPoint = 0;
@@ -68,64 +52,85 @@ public class Loops extends Calculator {
             initialization = headerParts[0].strip();
             condition = headerParts[1].strip();
             increment = headerParts[2].strip();
-        } else {
-            String[] headerParts = loopHeader.replace("for", "").strip().split(" ");
-            initialization = headerParts[0].strip();
-            condition = headerParts[1].strip();
-            increment = headerParts[2].strip();
-        }
-        // Handle initialization
-        Variables.assign(initialization); // i := 0
-
-        String[] InitializationArr = initialization.split(" ");
-
-        if (!InputScanner.NotANumber(InitializationArr[2])) {
-            Variables.VarInt.put(InitializationArr[0], Integer.valueOf(InitializationArr[2]));
-        } else {
-            Variables.VarInt.get(InitializationArr[2]);
-        }
-
-        // Extract loop variable
-        String loopVar = initialization.split(":=")[0].strip();
-
-        // Ensure the loop variable is initialized correctly
-        if (!Variables.VarInt.containsKey(loopVar)) {
-            throw new IllegalStateException("Loop variable " + loopVar + " is not initialized.");
-        }
-
-        String[] conditionParts = condition.split(" ");
+            // Handle initialization
+            Variables.assign(initialization); // i := 0
 
 
-        if (conditionParts.length > 1) {
-            // check if endpoint is variable or number
-            if (conditionParts[2].matches("\\d+")) {
-                endPoint = Integer.parseInt(conditionParts[2]);
+
+
+            String[] InitializationArr = initialization.split(" ");
+
+            if (!InputScanner.NotANumber(InitializationArr[2])) {
+                Variables.VarInt.put(InitializationArr[0], Integer.valueOf(InitializationArr[2]));
             } else {
-                if (Variables.VarInt.get(conditionParts[2]) != null) {
-                    endPoint = Variables.VarInt.get(conditionParts[2]);
+                Variables.VarInt.get(InitializationArr[2]);
+            }
+
+            // Extract loop variable
+            String loopVar = initialization.split(":=")[0].strip();
+
+            // Ensure the loop variable is initialized correctly
+            if (!Variables.VarInt.containsKey(loopVar)) {
+                throw new IllegalStateException("Loop variable " + loopVar + " is not initialized.");
+            }
+
+            String[] conditionParts = condition.split(" ");
+
+
+            if (conditionParts.length > 1) {
+                // check if endpoint is variable or number
+                if (conditionParts[2].matches("\\d+")) {
+                    endPoint = Integer.parseInt(conditionParts[2]);
                 } else {
-                    System.out.println("VarInt.get(conditionParts[2]) + Null");
+                    if (Variables.VarInt.get(conditionParts[2]) != null) {
+                        endPoint = Variables.VarInt.get(conditionParts[2]);
+                    } else {
+                        System.out.println("VarInt.get(conditionParts[2]) + Null");
+                    }
                 }
             }
-        }
-        List<String> loopBody = new ArrayList<>();
-        for (int i = startIndex + 1; i < lines.length; i++) {
-            String line = lines[i].strip(); // Get the current line in the loop
-            if (line.contains("}")) {
-                break; // End of the loop body
+            List<String> loopBody = new ArrayList<>();
+            for (int i = startIndex + 1; i < lines.length; i++) {
+                String line = lines[i].strip(); // Get the current line in the loop
+                if (line.contains("}")) {
+                    break; // End of the loop body
+                }
+                loopBody.add(line);
             }
-            loopBody.add(line);
+            String result = String.join("\n", loopBody);
+            loopi(result, condition, increment, loopVar, endPoint);
+        } else {
+            String[] headerParts = loopHeader.replace("for", "").trim().split(" ");
+            initialization = headerParts[0].trim();
+            condition = headerParts[1].trim();
+            increment = headerParts[2].trim();
+
+            int currentValue = Variables.VarInt.get(initialization);
+            endPoint = loopHeader.indexOf("{");
+            List<String> loopBody = new ArrayList<>();
+            for (int i = startIndex + 1; i < lines.length; i++) {
+                String line = lines[i].strip(); // Get the current line in the loop
+                if (line.contains("}")) {
+                    break; // End of the loop body
+                }
+                loopBody.add(line);
+            }
+            String result = String.join("\n", loopBody);
+            Shortloopi (result, loopHeader.replace("for", "").trim().substring(0, loopHeader.replace("for", "").trim().indexOf("{")));
         }
-        String result = String.join("\n", loopBody);
-        loopi(result, condition, increment, loopVar, endPoint);
     }
+
 
     static void loopi(String line, String condition, String increment, String loopVar, int endPoint) {
         // Initialize the loop variable
         int currentValue = Variables.VarInt.get(loopVar);
 
+        List<String> CondList = new ArrayList<>(List.of(condition.split(" ")));
+        String left = CondList.get(0);
+        String op = CondList.get(1);
+        String right = CondList.get(2);
         // Loop until the condition is met
-        while (evaluateCondition(condition, currentValue, endPoint)) {
+        while (evaluateCondition(left, op, right)) {
             // Execute the line of code in the loop
             Interpreter.eval(line);
 
@@ -138,25 +143,64 @@ public class Loops extends Calculator {
 
             // Update the variable in the map
             Variables.VarInt.put(loopVar, currentValue);
+//            System.out.println("CurrVal:" + currentValue);
+//            Variables.VarInt.replace(InitializationArr[0], 0);
         }
     }
 
-    private static boolean evaluateCondition(String condition, int currentValue, int endPoint) {
-        // Implement logic to evaluate the condition based on currentValue and endPoint
-        // For example, if condition is "i <= n", return currentValue <= endPoint
-        if (condition.contains("<=")) {
-            return currentValue <= endPoint - 1;
-        } else if (condition.contains("<")) {
-            return currentValue < endPoint - 1;
-        } else if (condition.contains(">=")) {
-            return currentValue >= endPoint - 1;
-        } else if (condition.contains(">")) {
-            return currentValue > endPoint - 1;
-        } else if (condition.contains("==")) {
-            return currentValue == endPoint - 1;
-        } else if (condition.contains("!=")) {
-            return currentValue != endPoint - 1;
+
+    private static boolean evaluateCondition(String left, String operator, String right) {
+        int leftValue = getValue(left);
+        int rightValue = getValue(right);
+        return switch (operator) {
+            case "==" -> leftValue == rightValue;
+            case "!=" -> leftValue != rightValue;
+            case ">" -> leftValue > rightValue;
+            case "<" -> leftValue < rightValue;
+            case ">=" -> leftValue >= rightValue;
+            case "<=" -> leftValue <= rightValue;
+            default -> throw new IllegalArgumentException("Unsupported operator: " + operator);
+        };
+    }
+
+
+
+
+
+
+
+    //    private static boolean evaluateCondition(String condition) {
+//        // Implement logic to evaluate the condition based on currentValue and endPoint
+//        // For example, if condition is "i <= n", return currentValue <= endPoint
+//        if (condition.contains("<=")) {
+//            return  Calculator.getValue((String) CondList.get(0)) <= Calculator.getValue((String) CondList.get(2))-1;
+//        } else if (condition.contains("<")) {
+//            return Calculator.getValue((String) CondList.get(0)) < Calculator.getValue((String) CondList.get(2))-1;
+//        } else if (condition.contains(">=")) {
+//            return Calculator.getValue((String) CondList.get(0)) >= Calculator.getValue((String) CondList.get(2)) +1;
+//        } else if (condition.contains(">")) {
+//            return Calculator.getValue((String) CondList.get(0)) > Calculator.getValue((String) CondList.get(2))+1;
+//        } else if (condition.contains("==")) {
+//            return Calculator.getValue((String) CondList.get(0)) == Calculator.getValue((String) CondList.get(2));
+//        } else if (condition.contains("!=")) {
+//            return Calculator.getValue((String)CondList.get(0)) != Calculator.getValue((String)CondList.get(2));
+//        }
+//        return false;
+//    }
+    static void Shortloopi(String line,String condition) {
+        // Initialize the loop variable
+
+        // Loop until the condition is met
+        List<String> CondList = new ArrayList<>(List.of(condition.split(" ")));
+        String left = CondList.get(0);
+        String op = CondList.get(1);
+        String right = CondList.get(2);
+
+        while (evaluateCondition(left, op, right)) {
+            // Execute the line of code in the loop
+            Interpreter.eval(line);
+//            List condparts = new ArrayList<>(List.of((condition.split(" "))));
+
         }
-        return false;
     }
 }

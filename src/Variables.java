@@ -19,40 +19,34 @@ public class Variables extends Calculator {
         } else {
             IntList = List.of(code.split(":="));
         } //
-       String line =  code.replaceAll(" ", "");
-            if (!InputScanner.NotANumber(IntList.get(1).strip()) && !IntList.get(0).trim().contains(" ") && !IntList.get(0).trim().isEmpty()) {   // [b] [num]
-                Variables.Integer();
-            } else if (InputScanner.CheckBool(line)) {
-                Variables.Boolean(line);
-            } else if (InputScanner.CheckString(line)) {
-                Variables.String(line);
-            }
-      }
+        String line =  code.replaceAll(" ", "");
+        if (!InputScanner.NotANumber(IntList.get(1).strip()) && !IntList.get(0).trim().contains(" ") && !IntList.get(0).trim().isEmpty()) {   // [b] [num]
+            Variables.Integer();
+        } else if (InputScanner.CheckBool(line)) {
+            Variables.Boolean(line);
+        } else if (InputScanner.CheckString(line)) {
+            Variables.String(line);
+        }
+    }
 
     private static void Integer() {
-                       // true                                  // true                                      true                true                                true
-            if (!InputScanner.NotANumber(IntList.get(1).trim()) && !IntList.get(0).contains("-") && (!(IntList.get(1).contains("+"))  &&  !(IntList.get(1).contains("*")  && !(IntList.get(1).contains("/"))))) {
-                                 // If [a] is any other String, for not Integer value
-                if (VarString.containsKey(IntList.get(0).strip()) || VarBool.containsKey(IntList.get(0).strip())) {
-                    System.out.println("Error: Another Variable is assigned to that name");
-                } else { //if [a] is New or assigned to number
-                            // [5] is a number   &&  reassign is false, so it's :=
-                    if (!InputScanner.NotANumber(IntList.get(1).strip()) && !reassign) {
-                                   // if [a] is already defined
-                        if (VarInt.containsKey(IntList.get(0).strip())) {
-//                            VarInt.put(IntList.get(0).strip(), Integer.valueOf(IntList.get(1).strip()));
+        // true                                  // true                                      true                true                                true
+        if (!InputScanner.NotANumber(IntList.get(1).trim()) && !IntList.get(0).contains("-") && (!(IntList.get(1).contains("+"))  &&  !(IntList.get(1).contains("*")  && !(IntList.get(1).contains("/"))))) {
+            // If [a] is any other String, for not Integer value
+            if (VarString.containsKey(IntList.get(0).strip()) || VarBool.containsKey(IntList.get(0).strip())) {
+                System.out.println("Error: Another Variable is assigned to that name");
+            } else { //if [a] is New or assigned to number
+                // [5] is a number   &&  reassign is false, so it's :=
+                if (!InputScanner.NotANumber(IntList.get(1).strip()) && !reassign) {
 
-                        System.out.println("Error: no new variables on left side of :=" + IntList.get(0).strip());
-                        } else { // if [a] is not defined
-                            VarInt.put(IntList.get(0).strip(), getValue(IntList.get(1).strip()));
-                        }
-                    } else if (!InputScanner.NotANumber(IntList.get(1).strip()) && reassign) {
-                        VarInt.put(IntList.get(0).strip(), getValue(IntList.get(1).strip()));
+                    VarInt.put(IntList.get(0).strip(), getValue(IntList.get(1).strip()));
+                } else if (!InputScanner.NotANumber(IntList.get(1).strip()) && reassign) {
+                    VarInt.put(IntList.get(0).strip(), getValue(IntList.get(1).strip()));
 
-                    }
                 }
             }
         }
+    }
 
 
     private static void String(String line) {
