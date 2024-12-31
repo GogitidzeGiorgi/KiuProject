@@ -2,7 +2,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-public class Interpreter extends Calculator {
+public class Interpreter {
     public static  boolean skipNextLine = false;
     public static void eval(String code) {
         String[] lines = code.split("\n");

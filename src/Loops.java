@@ -1,6 +1,6 @@
 import java.util.*;
 
-public class Loops extends Calculator {
+public class Loops {
     static void handleWhileLoop(int startIndex, String[] lines) {
         String condition = lines[startIndex].replace("for", "").replace("{", "").trim();
 
@@ -48,7 +48,7 @@ public class Loops extends Calculator {
         String[] InitializationArr = initialization.split(" ");
 
         if (!InputScanner.NotANumber(InitializationArr[2])) {
-            Variables.VarInt.put(InitializationArr[0], getValue(InitializationArr[2]));
+            Variables.VarInt.put(InitializationArr[0], Calculator.getValue(InitializationArr[2]));
         }
 
         String loopVar = initialization.split(":=")[0].strip();
@@ -62,7 +62,7 @@ public class Loops extends Calculator {
 
         if (conditionParts.length > 1) {
             if (!InputScanner.NotANumber(conditionParts[2])) {
-                endPoint = getValue(conditionParts[2]);
+                endPoint = Calculator.getValue(conditionParts[2]);
             } else {
                 System.out.println("VarInt.get(conditionParts[2]) + Null");
             }
@@ -113,16 +113,16 @@ public class Loops extends Calculator {
         return false;
     }
     private static boolean evaluateConditionWhile(String left, String operator, String right) {
-        int leftValue = getValue(left);
-        int rightValue = getValue(right);
+        int leftValue = Calculator.getValue(left);
+        int rightValue = Calculator.getValue(right);
 
         return switch (operator) {
             case "==" -> leftValue == rightValue;
             case "!=" -> leftValue < rightValue - 1 || leftValue > rightValue + 1;
-            case ">" -> leftValue > rightValue + 1;
-            case "<" -> leftValue < rightValue - 1;
-            case ">=" -> leftValue >= rightValue + 1;
-            case "<=" -> leftValue <= rightValue - 1;
+            case ">" -> leftValue > rightValue;
+            case "<" -> leftValue < rightValue;
+            case ">=" -> leftValue >= rightValue;
+            case "<=" -> leftValue <= rightValue;
             default -> throw new IllegalArgumentException("Unsupported operator: " + operator);
         };
     }

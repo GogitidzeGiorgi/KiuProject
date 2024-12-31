@@ -1,12 +1,23 @@
 public class Main {
     public static void main(String[] args) {
         String code = """
-                a := 28
-                b := 2
-                if a != 2 {
-                   fmt.Println(a)
-                }else{
-                   fmt.Println(b)
+                num := 29
+                isPrime := true
+                
+                if num <= 1 {
+                   isPrime = false
+                } else {
+                   for i := 2; i*i <= num; i++ {
+                      if num%i == 0 {
+                         isPrime = false
+                      }
+                   }
+                }
+                
+                if isPrime {
+                   fmt.Println("%d is prime.", num)
+                } else {
+                   fmt.Println("%d is not prime.", num)
                 }
                 """;
         Interpreter.eval(code);
