@@ -7,50 +7,53 @@ public class If extends Calculator {
 
 
     public static void handleIf(String line) {
+        System.out.println(Variables.VarBool.entrySet());
         goToBool = false;
-        // Extract the condition inside the `if` statement
         String condition = line.substring(line.indexOf("if") + 2, line.lastIndexOf("{")).strip();
         List<String> parts = new ArrayList<>(List.of(condition.split(" ")));
-        System.out.println(parts);
       for(String s : Variables.VarBool.keySet()) {
           if(line.contains(s)) {
               goToBool = true;
+              System.out.println("GoToBool");
               if(Variables.VarBool.get(s)){
-
                   Interpreter.skipNextLine = false;
-                  skipElse = true;
-                  // Execute the 'if' block
+                  System.out.println(line + ".true");
 
+                  skipElse = true;
               }else{
                   skipElse = false;
-                  Interpreter.skipNextLine = true; // Skip the 'if' block
-                  handleElse(line); // Handle the `else` block if the `if` condition is not met
+                  Interpreter.skipNextLine = true;
+                  System.out.println(line + ".false");
+                  handleElse(line);
               }
           }
       }
-        // Evaluate the `if` condition
         if(!goToBool) {
             boolean ifConditionMet = evaluateCondition(parts.get(0).trim(), parts.get(1).trim(), parts.get(2).trim());
             if (ifConditionMet) {
                 Interpreter.skipNextLine = false;
                 skipElse = true;
-                // Execute the 'if' block
+                System.out.println(line + ".true");
             } else {
+                System.out.println(line + ".false");
+
                 skipElse = false;
-                Interpreter.skipNextLine = true; // Skip the 'if' block
-                handleElse(line); // Handle the `else` block if the `if` condition is not met
+                Interpreter.skipNextLine = true;
+                handleElse(line);
             }
+        }else{
+            goToBool = false;
         }
 
     }
 
     public static void handleElse(String line) {
         int elseIndex = line.indexOf("else");
-        if (elseIndex != -1) { // Check if an `else` block exists
-            String elseBlock = line.substring(elseIndex + 4).strip(); // Get everything after 'else'
+        if (elseIndex != -1) {
+            String elseBlock = line.substring(elseIndex + 4).strip();
 
             if (elseBlock.startsWith("{")) {
-                Interpreter.skipNextLine = false; // Execute the 'else' block
+                Interpreter.skipNextLine = false;
             } else {
                 throw new IllegalArgumentException("Malformed 'else' statement.");
             }
@@ -58,9 +61,18 @@ public class If extends Calculator {
     }
 
     public static boolean evaluateCondition(String left, String operator, String right) {
-        System.out.println(left+ " "+ operator+ " "+right);
-        int leftValue = getValue(left);
-        int rightValue = getValue(right);
+        int leftValue;
+        if(getValue(left) == null) {
+            leftValue = arithmetic(left);
+        } else {
+            leftValue = getValue(left);
+        }
+        int rightValue;
+        if(getValue(right) == null) {
+            rightValue = arithmetic(right);
+        } else {
+            rightValue = getValue(right);
+        }
         return switch (operator) {
             case "==" -> leftValue == rightValue;
             case "!=" -> leftValue != rightValue;

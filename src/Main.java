@@ -3,15 +3,17 @@ public class Main {
         String code = """
                 num := 29
                 isPrime := true
+                fmt.Println(isPrime)
                 if num <= 1 {
                    isPrime = false
                 } else {
-                   for i := 2; i * i <= num; i++ {
+                   for i := 2; i*i <= num; i++ {
                       if num%i == 0 {
                          isPrime = false
                       }
                    }
                 }
+                fmt.Println(isPrime)
                 
                 if isPrime {
                    fmt.Println("is prime")

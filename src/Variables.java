@@ -1,4 +1,3 @@
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -10,15 +9,13 @@ public class Variables extends Calculator {
     public static boolean reassign;
     public static List<String> IntList;
 
-
     public static void assign(String code) {
         reassign = !code.contains(":=");
-
         if (reassign) {
             IntList = List.of(code.split("="));
         } else {
             IntList = List.of(code.split(":="));
-        } //
+        }
         String line =  code.replaceAll(" ", "");
         if (!InputScanner.NotANumber(IntList.get(1).strip()) && !IntList.get(0).trim().contains(" ") && !IntList.get(0).trim().isEmpty()) {   // [b] [num]
             Variables.Integer();
@@ -30,15 +27,11 @@ public class Variables extends Calculator {
     }
 
     private static void Integer() {
-        // true                                  // true                                      true                true                                true
         if (!InputScanner.NotANumber(IntList.get(1).trim()) && !IntList.get(0).contains("-") && (!(IntList.get(1).contains("+"))  &&  !(IntList.get(1).contains("*")  && !(IntList.get(1).contains("/"))))) {
-            // If [a] is any other String, for not Integer value
             if (VarString.containsKey(IntList.get(0).strip()) || VarBool.containsKey(IntList.get(0).strip())) {
                 System.out.println("Error: Another Variable is assigned to that name");
-            } else { //if [a] is New or assigned to number
-                // [5] is a number   &&  reassign is false, so it's :=
+            } else {
                 if (!InputScanner.NotANumber(IntList.get(1).strip()) && !reassign) {
-
                     VarInt.put(IntList.get(0).strip(), getValue(IntList.get(1).strip()));
                 } else if (!InputScanner.NotANumber(IntList.get(1).strip()) && reassign) {
                     VarInt.put(IntList.get(0).strip(), getValue(IntList.get(1).strip()));
@@ -47,7 +40,6 @@ public class Variables extends Calculator {
             }
         }
     }
-
 
     private static void String(String line) {
         List<String> StringList ;
@@ -58,7 +50,7 @@ public class Variables extends Calculator {
         }
         if (InputScanner.CheckString(StringList.get(1))) {
             if (VarInt.containsKey(StringList.get(0).strip())) {
-                System.out.println("Error: Another Variable is assigned to name:" + StringList.get(0).strip());
+                System.out.println("Error: Another Variable is assigned to name:" + StringList.getFirst().strip());
             } else if (!reassign) {
                 if (VarString.containsKey(StringList.get(0).strip())) {
                     System.out.println("Error: no new variables on left side of :=");
@@ -80,28 +72,27 @@ public class Variables extends Calculator {
             BoolList = List.of(line.split(":="));
         }
         if (InputScanner.CheckBool(BoolList.get(1))) {
-            if (VarString.containsKey(BoolList.get(0).strip()) || VarInt.containsKey(BoolList.get(0).strip())) {
+            if (VarString.containsKey(BoolList.getFirst().strip()) || VarInt.containsKey(BoolList.getFirst().strip())) {
                 System.out.println("Error: Another Variable is assigned to that name");
             } else {
                 if (!reassign) {
-                    if (VarBool.containsKey(BoolList.get(0).strip())) {
+                    if (VarBool.containsKey(BoolList.getFirst().strip())) {
                         System.out.println("Error: no new variables on left side of :=");
                     } else {
                         if (line.contains("true")) {
-                            VarBool.put(BoolList.get(0).strip(), true);
+                            VarBool.put(BoolList.getFirst().strip(), true);
                         } else {
-                            VarBool.put(BoolList.get(0).strip(), false);
+                            VarBool.put(BoolList.getFirst().strip(), false);
                         }
                     }
                 }else{
                     if (line.contains("true")) {
-                        VarBool.put(BoolList.get(0).strip(), true);
+                        VarBool.put(BoolList.getFirst().strip(), true);
                     } else {
-                        VarBool.put(BoolList.get(0).strip(), false);
+                        VarBool.put(BoolList.getFirst().strip(), false);
                     }
                 }
             }
         }
     }
 }
-

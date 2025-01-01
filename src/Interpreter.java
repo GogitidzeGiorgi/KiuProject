@@ -1,5 +1,4 @@
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 public class Interpreter {
@@ -17,18 +16,9 @@ public class Interpreter {
             }
             if (lines[i].isEmpty()) continue;
             if(lines[i].contains("break")){
-
+                skipNextLine = true;
+                continue;
             }
-
-//            if (!If.nextLine){
-//                If.nextLine = true;
-//                continue;
-//            }
-//
-//            if (lines[i].contains("if")) {
-//                If.handleIf(lines[i]);
-//            }
-
 
             if(lines[i].contains("if")){
                 If.handleIf(lines[i]);
@@ -54,13 +44,11 @@ public class Interpreter {
     }
 
     private static boolean containsSub(String line) {
-        Boolean boolVal = true;
-        List<String> Boolwords = new ArrayList<>(List.of(line.split("=")));
-        if (Boolwords.size() == 2 && Boolwords.get(1).contains("-"));{
+        boolean boolVal = true;
+        List<String> boolWords = new ArrayList<>(List.of(line.split("=")));
+        if (boolWords.size() == 2 && boolWords.get(1).contains("-")){
             boolVal = false;
         }
-
-
         return boolVal;
     }
 }

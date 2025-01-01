@@ -2,7 +2,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class InputScanner {
-
     public static boolean checkInt0, checkInt1, checkString = false;
     public static List<String> CheckedInt = new ArrayList<>();
 
@@ -15,6 +14,7 @@ public class InputScanner {
         }
         return checkInt1;
     }
+
     public static int DigitCounter(String program) {
 
         int DigitCount = 0;
@@ -48,12 +48,12 @@ public class InputScanner {
     }
 
     public static Boolean CheckString(String program) {
-        int StringIndex = 0;
         checkString = false;
         Character quoteChar = '\"';
         for (Character c : program.toCharArray()) {
             if (c.equals(quoteChar)) {
                 checkString = true;
+                break;
             }
         }
         return checkString;

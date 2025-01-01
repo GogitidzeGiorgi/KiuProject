@@ -1,37 +1,23 @@
 public class Calculator {
     static char operator;
     static int value;
-    public static boolean retBool;
     static String[] parts;
     static String varName;
     static String expression;
     static String varNameTemp;
     static int valueForVar;
+    static int secValue;
 
     public static void handleCalculation(String line) throws ArithmeticException {
-
-
-
-        // Check for augmented assignment operators
-        // need to be checked
-
         if (line.contains("==")) {
             parts = line.split("==");
-            varName = parts[0].strip();  //num%i
-            System.out.println(varName);
-            varNameTemp = varName; //num%i
-            System.out.println(varNameTemp);
+            varName = parts[0].strip();
+            varNameTemp = varName;
             expression = parts[1].strip();
-            valueForVar = arithmetic(varNameTemp); // num%i
-            System.out.println(valueForVar);
+            valueForVar = arithmetic(varNameTemp);
             Variables.VarInt.put(varNameTemp, valueForVar);
-            System.out.println(varNameTemp + " = " + valueForVar);
-            value = arithmetic(expression); // Assuming this returns an int or a boolean value
-            // Assuming you have a method to get the value of the variable
-            if (Variables.VarInt.containsKey(varNameTemp)) {
-                int currentValue = getValue(varNameTemp);
-                boolean isEqual = (currentValue == value);
-            }
+            value = arithmetic(expression);
+
         } else if(line.contains("++")){
             varName = line.replaceAll("\\+\\+", "");
             if(Variables.VarInt.containsKey(varName)){
@@ -98,42 +84,33 @@ public class Calculator {
             }
 
         }
-//         Update the variable in the map
     }
 
-    /// Arithmetic
-
-
-
-
     static int arithmetic(String input) {
-
-
-
-
-        int secValue = 0;
-        boolean isvar = false;
-        String calcVar = ""; // b := 5 + 2
-        if(input.contains(":=") ){
-            isvar = true;
+        boolean isVar = false;
+        String calcVar = "";
+        if (input.contains(":=")) {
+            isVar = true;
             parts = input.split(":=");
-            if(!parts[0].strip().contains(" ")){
+            if (!parts[0].strip().contains(" ")) {
                 expression = parts[1].strip();
                 calcVar = parts[0].strip();
             }
-        }else if(input.contains("=") ) {
-            isvar = true;
+        } else if (input.contains("=")) {
+            isVar = true;
             parts = input.split("=");
             if (!parts[0].strip().contains(" ")) {
                 expression = parts[1].strip();
                 calcVar = parts[0].strip();
             }
         }
+        String stripped;
+        if(null != expression){
+            stripped = expression.replaceAll(" ", "");
+        }  else {
+            stripped = input;
+        }
 
-
-        String stripped = expression.replaceAll(" ", "");
-            //num%i/
-        // Determine the operator present in the expression
         if (stripped.contains("+")) {
             operator = '+';
         } else if (stripped.contains("-")) {
@@ -149,13 +126,13 @@ public class Calculator {
         switch (operator) {
             case '+':
                 String[] addNumbers = stripped.split("\\+");
-                value = 1; // Reset value for multiplication
-                if(!InputScanner.NotADigit(addNumbers[0].trim())){
+                value = 1;
+                if (!InputScanner.NotADigit(addNumbers[0].trim())) {
                     value = Integer.parseInt(addNumbers[0].trim());
-                }else if (!InputScanner.NotANumber(addNumbers[0].trim())){
+                } else if (!InputScanner.NotANumber(addNumbers[0].trim())) {
                     value = Variables.VarInt.get(addNumbers[0].trim());
                 }
-                for(int i = 1; i < addNumbers.length; i++) {
+                for (int i = 1; i < addNumbers.length; i++) {
                     if (!InputScanner.NotADigit(addNumbers[i].trim())) {
                         secValue = Integer.parseInt(addNumbers[i].trim());
                     } else if (!InputScanner.NotANumber(addNumbers[i].trim())) {
@@ -167,13 +144,13 @@ public class Calculator {
 
             case '-':
                 String[] subNumbers = stripped.split("-");
-                value = 1; // Reset value for multiplication
-                if(!InputScanner.NotADigit(subNumbers[0].trim())){
+                value = 1;
+                if (!InputScanner.NotADigit(subNumbers[0].trim())) {
                     value = Integer.parseInt(subNumbers[0].trim());
-                }else if (!InputScanner.NotANumber(subNumbers[0].trim())){
+                } else if (!InputScanner.NotANumber(subNumbers[0].trim())) {
                     value = Variables.VarInt.get(subNumbers[0].trim());
                 }
-                for(int i = 1; i < subNumbers.length; i++) {
+                for (int i = 1; i < subNumbers.length; i++) {
                     if (!InputScanner.NotADigit(subNumbers[i].trim())) {
                         secValue = Integer.parseInt(subNumbers[i].trim());
                     } else if (!InputScanner.NotANumber(subNumbers[i].trim())) {
@@ -185,13 +162,13 @@ public class Calculator {
 
             case '*':
                 String[] mulNumbers = stripped.split("\\*");
-                value = 1; // Reset value for multiplication
-                if(!InputScanner.NotADigit(mulNumbers[0].trim())){
+                value = 1;
+                if (!InputScanner.NotADigit(mulNumbers[0].trim())) {
                     value = Integer.parseInt(mulNumbers[0].trim());
-                }else if (!InputScanner.NotANumber(mulNumbers[0].trim())){
+                } else if (!InputScanner.NotANumber(mulNumbers[0].trim())) {
                     value = Variables.VarInt.get(mulNumbers[0].trim());
                 }
-                for(int i = 1; i < mulNumbers.length; i++) {
+                for (int i = 1; i < mulNumbers.length; i++) {
                     if (!InputScanner.NotADigit(mulNumbers[i].trim())) {
                         secValue = Integer.parseInt(mulNumbers[i].trim());
                     } else if (!InputScanner.NotANumber(mulNumbers[i].trim())) {
@@ -203,16 +180,16 @@ public class Calculator {
 
             case '/':
                 String[] divNumbers = stripped.split("/");
-                if(!InputScanner.NotADigit(divNumbers[0].trim())){
-                    value = Integer.parseInt(divNumbers[0].trim());
-                }else if (!InputScanner.NotANumber(divNumbers[0].trim())){
-                    value = Variables.VarInt.get(divNumbers[0].trim());
+                if (!InputScanner.NotADigit(divNumbers[0].trim())) {
+                    value = getValue(divNumbers[0].trim());
+                } else if (!InputScanner.NotANumber(divNumbers[0].trim())) {
+                    value = getValue(divNumbers[0].trim());
                 }
-                for(int i = 1; i < divNumbers.length; i++) {
+                for (int i = 1; i < divNumbers.length; i++) {
                     if (!InputScanner.NotADigit(divNumbers[i].trim())) {
-                        secValue = Integer.parseInt(divNumbers[i].trim());
+                        secValue = getValue(divNumbers[i].trim());
                     } else if (!InputScanner.NotANumber(divNumbers[i].trim())) {
-                        secValue = Variables.VarInt.get(divNumbers[i].trim());
+                        secValue = getValue(divNumbers[i].trim());
                     }
                     if (secValue == 0) {
                         throw new ArithmeticException("Division by zero");
@@ -223,16 +200,16 @@ public class Calculator {
 
             case '%':
                 String[] modNumbers = stripped.split("%");
-                if(!InputScanner.NotADigit(modNumbers[0].trim())){
-                    value = Integer.parseInt(modNumbers[0].trim());
-                }else if (!InputScanner.NotANumber(modNumbers[0].trim())){
-                    value = Variables.VarInt.get(modNumbers[0].trim());
+                if (!InputScanner.NotADigit(modNumbers[0].trim())) {
+                    value = getValue(modNumbers[0].trim());
+                } else if (!InputScanner.NotANumber(modNumbers[0].trim())) {
+                    value = getValue(modNumbers[0].trim());
                 }
-                for(int i = 1; i < modNumbers.length; i++) {
+                for (int i = 1; i < modNumbers.length; i++) {
                     if (!InputScanner.NotADigit(modNumbers[i].trim())) {
-                        secValue = Integer.parseInt(modNumbers[i].trim());
-                    } else if (!InputScanner.NotANumber(modNumbers[i].trim())) {
-                        secValue = Variables.VarInt.get(modNumbers[i].trim());
+                        secValue = getValue(modNumbers[i].trim());
+                    } else if (!InputScanner.NotANumber(modNumbers[i])) {
+                        secValue = getValue(modNumbers[i]);
                     }
                     if (secValue == 0) {
                         throw new ArithmeticException("Modulo by zero");
@@ -247,18 +224,16 @@ public class Calculator {
 
         }
 
-
-        if(isvar){
-            Variables.assign(calcVar +" := "+value);
+        if (isVar) {
+            Variables.assign(calcVar + " := " + value);
         }
-        //Depending on any operator chosen, String is split by operator into String[] and calls Variables.VarInt.ge}
-        return value;
 
+        return value;
     }
 
     public static Integer getValue(String varOrNum) {
         if (varOrNum == null || varOrNum.isEmpty()) {
-            return null; // or throw an IllegalArgumentException
+            return null;
         }
         if (Variables.VarInt.containsKey(varOrNum)) {
             return Variables.VarInt.get(varOrNum);
@@ -266,9 +241,9 @@ public class Calculator {
         try {
             return Integer.parseInt(varOrNum);
         } catch (NumberFormatException e) {
-            // Handle the case where varOrNum is not a valid integer
-            return null; // or throw an IllegalArgumentException
+            return null;
         }
     }
 }
+
 
