@@ -37,6 +37,7 @@ public class InputScanner {
         }
         return checkInt1;
     }
+    //Checks whether String contains integer or Variable in VarInt with integer value
     public static boolean NotADigit(String code) {
         boolean checkInt1 = false;
         for (char c : code.toCharArray()) {
@@ -46,6 +47,7 @@ public class InputScanner {
         }
         return checkInt1;
     }
+    //Checks if String contains pure Digit
 
     public static Boolean CheckString(String program) {
         checkString = false;
@@ -58,6 +60,7 @@ public class InputScanner {
         }
         return checkString;
     }
+    //checks if input contains ", and assumes it's a string.
 
     public static boolean CheckVarInt(String code) {
         for (String c : Variables.VarInt.keySet()) {
@@ -72,4 +75,5 @@ public class InputScanner {
     public static boolean CheckBool(String code) {
         return code.contains("true") || code.contains("false");
     }
+    //Checks boolean.
 }

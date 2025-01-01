@@ -6,4 +6,4 @@ for b != 0 {
     b = a%b
     a = c
 }
-fmt.Println(b)
+fmt.Println(a)

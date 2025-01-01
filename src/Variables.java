@@ -24,6 +24,11 @@ public class Variables extends Calculator {
         } else if (InputScanner.CheckString(line)) {
             Variables.String(line);
         }
+        //Here are put variables, which are assigned to single elements -  a := 5, there are no operations.
+        //It also chooses depending on what value element holds, whether variable is String, Integer or boolean.
+        //reassign is created in case code contains =
+        //Difference is that in GoLang reassigning new value to Variable is prohibided with operator ":=", which is used
+        //only to initialize new variables.
     }
 
     private static void Integer() {
@@ -39,7 +44,7 @@ public class Variables extends Calculator {
                 }
             }
         }
-    }
+    }//Safety precautions, this code simply stores integer into variable.
 
     private static void String(String line) {
         List<String> StringList ;
@@ -61,8 +66,8 @@ public class Variables extends Calculator {
                 VarString.put(StringList.get(0).strip(), StringList.get(1).strip());
             }
         }
-
     }
+    //Safety precautions, this code simply stores String into variable.
 
     private static void Boolean(String line) {
         List<String> BoolList;
@@ -95,4 +100,5 @@ public class Variables extends Calculator {
             }
         }
     }
+    //Safety precautions, this code simply stores boolean into variable.
 }

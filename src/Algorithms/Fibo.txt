@@ -14,5 +14,5 @@ if n > 1 {
       a = b
       b = fib
    }
-  fmt. Println(fib)
+  fmt.Println(fib)
 }

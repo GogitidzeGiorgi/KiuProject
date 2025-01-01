@@ -7,36 +7,28 @@ public class If extends Calculator {
 
 
     public static void handleIf(String line) {
-        System.out.println(Variables.VarBool.entrySet());
         goToBool = false;
         String condition = line.substring(line.indexOf("if") + 2, line.lastIndexOf("{")).strip();
         List<String> parts = new ArrayList<>(List.of(condition.split(" ")));
       for(String s : Variables.VarBool.keySet()) {
           if(line.contains(s)) {
               goToBool = true;
-              System.out.println("GoToBool");
               if(Variables.VarBool.get(s)){
                   Interpreter.skipNextLine = false;
-                  System.out.println(line + ".true");
-
                   skipElse = true;
               }else{
                   skipElse = false;
                   Interpreter.skipNextLine = true;
-                  System.out.println(line + ".false");
                   handleElse(line);
               }
           }
-      }
+      } //This code goes through if loop and checks skinNextLine, to determine should next lines run or no.
         if(!goToBool) {
             boolean ifConditionMet = evaluateCondition(parts.get(0).trim(), parts.get(1).trim(), parts.get(2).trim());
             if (ifConditionMet) {
                 Interpreter.skipNextLine = false;
                 skipElse = true;
-                System.out.println(line + ".true");
             } else {
-                System.out.println(line + ".false");
-
                 skipElse = false;
                 Interpreter.skipNextLine = true;
                 handleElse(line);
@@ -58,7 +50,7 @@ public class If extends Calculator {
                 throw new IllegalArgumentException("Malformed 'else' statement.");
             }
         }
-    }
+    }// If skipElse is false and NextLine is skipped(IF), then handElse executes, and it runs it's body
 
     public static boolean evaluateCondition(String left, String operator, String right) {
         int leftValue;
@@ -83,4 +75,5 @@ public class If extends Calculator {
             default -> throw new IllegalArgumentException("Unsupported operator: " + operator);
         };
     }
+    // In case this is not pure expression, like i*i <= num, condition is safely checked with arithmetic and getValue methods.
 }

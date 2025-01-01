@@ -10,14 +10,15 @@ public class Calculator {
 
     public static void handleCalculation(String line) throws ArithmeticException {
         if (line.contains("==")) {
-            parts = line.split("=="); // [num%i] [0]
-            varName = parts[0].strip();   // [num%i]
-            varNameTemp = varName; // [num%i]
-            expression = parts[1].strip();  //[0]
-            valueForVar = arithmetic(varNameTemp);  //  not0   = [num%i]
-            Variables.VarInt.put(varNameTemp, valueForVar);    // [num%i] [not 0]
+            parts = line.split("==");
+            varName = parts[0].strip();
+            varNameTemp = varName;
+            expression = parts[1].strip();
+            valueForVar = arithmetic(varNameTemp);
+            Variables.VarInt.put(varNameTemp, valueForVar);
             value = arithmetic(expression);
-
+            // Parts are split by any of operators, in case it is IF-conditional, it stores varName and it's new values
+            // for every iteration(in case there is) and checks condition, for other operations it calls method - arithmetic.
         } else if(line.contains("++")){
             varName = line.replaceAll("\\+\\+", "");
             if(Variables.VarInt.containsKey(varName)){
@@ -104,12 +105,15 @@ public class Calculator {
                 calcVar = parts[0].strip();
             }
         }
+        //In case there are operations like a := 3 + 1,     a*a <= n, and so on
+        //i.e. called from Interpreter, but are not pure expressions
         String stripped;
         if(null != expression){
             stripped = expression.replaceAll(" ", "");
         }  else {
-            stripped = input;
+            stripped = input.replaceAll(" ", "");
         }
+        // Replaces spaces, whether it is pure expression or input called from Interpreter(arithmetic)
 
         if (stripped.contains("+")) {
             operator = '+';
@@ -122,6 +126,7 @@ public class Calculator {
         } else if (stripped.contains("%")) {
             operator = '%';
         }
+        //checks operator
 
         switch (operator) {
             case '+':
@@ -217,17 +222,20 @@ public class Calculator {
                     value %= secValue;
                 }
                 break;
-
+            //Depending on operator chosen, case goes on. They are split by operators, first is stored as value to return,
+            // other ones are stored as secValue and operated by value.
             default:
                 value = getValue(stripped);
                 break;
-
+                // If there is no operator at all, there is one element and it somehow managed to get here,
+                // though it should go to Variable.assign this is safe point, which is still stored
         }
 
         if (isVar) {
             Variables.assign(calcVar + " := " + value);
         }
-
+        //If not pure expression was called from Interpreter, it is split by code above by ":=" or "="
+        // and value assigns to calcVar.
         return value;
     }
 
@@ -244,6 +252,8 @@ public class Calculator {
             return null;
         }
     }
+    //This method returns value, whether it is variable store before, or digit as String.
+    //This method returns value, whether it is variable store before, or digit as String.
 }
 
 

@@ -13,7 +13,6 @@ public class Loops extends Calculator {
         }
 
         String body = String.join("\n", loopBody);
-
         String leftOperand = splitCond[0];
         String operator = splitCond[1];
         String rightOperand = splitCond[2];
@@ -24,6 +23,8 @@ public class Loops extends Calculator {
         }
         Interpreter.skipNextLine = true;
     }
+    //Method is called in case Interpreter sees While loop, which in GoLang is For with only condition.
+    // It determines how big it's body is and iterates through it until certain condition is met.
 
 
     static void handleForLoop(int startIndex, String[] lines) {
@@ -53,7 +54,7 @@ public class Loops extends Calculator {
 
         String[] conditionParts = condition.split(" ");
 
-       int condRight = 0;
+        int condRight = 0;
         if (conditionParts.length > 1) {
             condRight = arithmetic(conditionParts[2]);
         }
@@ -64,8 +65,12 @@ public class Loops extends Calculator {
             loopBody.add(line);
         }
         String result = String.join("\n", loopBody);
-        loop(result, condition, increment, loopVar, condRight);  //condition[i*i <= num]     increment[i++]     condRight[num]
+        loop(result, condition, increment, loopVar, condRight);
     }
+    //Method is called in case Interpreter sees While loop, which in GoLang is For with only condition.
+    // It determines how big it's body is and iterates through it until certain condition is met.
+
+
 
     static void loop(String line, String condition, String increment, String loopVar, int endPoint) {
         String[] splitCond = condition.split(" ");
@@ -84,24 +89,28 @@ public class Loops extends Calculator {
         }
         Interpreter.skipNextLine = true;
     }
+    //In case there are difficult condition parts, like -  i*i <= n
+    // It creates leftOperand, which firstly does operation(Or nothing), and is checked in certain condition, while
+    //while currentValue increases/decreases and updates leftOperand for new operations.
 
     private static boolean evaluateConditionFor(String condition, int leftOperand, int endPoint, String loopVar) {
         if (condition.contains("<=")) {
-            return leftOperand <= endPoint - 1;
+            return leftOperand <= endPoint ;
         } else if (condition.contains("<")) {
-            return leftOperand < endPoint - 1;
+            return leftOperand < endPoint ;
         } else if (condition.contains(">=")) {
-            return leftOperand >= endPoint + 1;
+            return leftOperand >= endPoint ;
         } else if (condition.contains(">")) {
-            return leftOperand > endPoint + 1;
+            return leftOperand > endPoint ;
         } else if (condition.contains("==")) {
             return leftOperand == endPoint;
         } else if (condition.contains("!=")) {
-            return leftOperand < endPoint - 1 || leftOperand > endPoint + 1;
+            return leftOperand < endPoint || leftOperand > endPoint;
         }
         Variables.VarInt.replace(loopVar, 0);
         return false;
     }
+    //This method checks certain conditions for every operator chosen and restores loopVar
     private static boolean evaluateConditionWhile(String left, String operator, String right) {
         int leftValue;
         if(getValue(left) == null) {
@@ -118,7 +127,7 @@ public class Loops extends Calculator {
 
         return switch (operator) {
             case "==" -> leftValue == rightValue;
-            case "!=" -> leftValue < rightValue - 1 || leftValue > rightValue + 1;
+            case "!=" -> leftValue < rightValue || leftValue > rightValue;
             case ">" -> leftValue > rightValue;
             case "<" -> leftValue < rightValue;
             case ">=" -> leftValue >= rightValue;
@@ -126,4 +135,5 @@ public class Loops extends Calculator {
             default -> throw new IllegalArgumentException("Unsupported operator: " + operator);
         };
     }
+    //This method checks certain conditions for every operator chosen and restores loopVar
 }
