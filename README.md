@@ -25,8 +25,8 @@ This interpreter works by taking GoLang code as a string input and interpreting 
 
 | Name                 | Role             |
 |----------------------|------------------|
-| **Nino Barbakadze**  | Loops        |
-| **Giorgi Gogitidze** | Interpreter, Variables        |
+| **Nino Barbakadze**  | Loops, Interpreter        |
+| **Giorgi Gogitidze** | Variables, Interpreter, Input Scanner        |
 | **Luka Shalamberidze** | Calculator      |
 | **Teimuraz Qiliaturi** | If statements      |
 
