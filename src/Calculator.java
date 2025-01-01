@@ -10,12 +10,12 @@ public class Calculator {
 
     public static void handleCalculation(String line) throws ArithmeticException {
         if (line.contains("==")) {
-            parts = line.split("==");
-            varName = parts[0].strip();
-            varNameTemp = varName;
-            expression = parts[1].strip();
-            valueForVar = arithmetic(varNameTemp);
-            Variables.VarInt.put(varNameTemp, valueForVar);
+            parts = line.split("=="); // [num%i] [0]
+            varName = parts[0].strip();   // [num%i]
+            varNameTemp = varName; // [num%i]
+            expression = parts[1].strip();  //[0]
+            valueForVar = arithmetic(varNameTemp);  //  not0   = [num%i]
+            Variables.VarInt.put(varNameTemp, valueForVar);    // [num%i] [not 0]
             value = arithmetic(expression);
 
         } else if(line.contains("++")){

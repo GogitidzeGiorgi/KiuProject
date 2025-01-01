@@ -44,14 +44,20 @@ public class Interpreter {
     }
 
     private static boolean containsSub(String line) {
-        boolean boolVal = true;
+        Boolean boolVal = true;
         List<String> boolWords = new ArrayList<>(List.of(line.split("=")));
-        if (boolWords.size() == 2 && boolWords.get(1).contains("-")){
+        if(boolWords.size()>1){
+        if (!(boolWords.get(1).indexOf(1)=='-'||boolWords.get(0).indexOf(1)=='-')){
             boolVal = false;
-        }
+        }}
+        if(!line.contains("-")){boolVal =  false;}
+
         return boolVal;
+
     }
 }
+
+
 
 
 

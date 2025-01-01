@@ -13,13 +13,6 @@ public class Main {
                       }
                    }
                 }
-                fmt.Println(isPrime)
-                
-                if isPrime {
-                   fmt.Println("is prime")
-                } else {
-                   fmt.Println("is not prime")
-                }
                 """;
         Interpreter.eval(code);
         System.out.println();
