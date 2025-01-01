@@ -3,16 +3,15 @@ import java.util.*;
 public class Loops {
     static void handleWhileLoop(int startIndex, String[] lines) {
         String condition = lines[startIndex].replace("for", "").replace("{", "").trim();
-
+        int braceCount = 1;
 
         String[] splittedCond = condition.split(" ");
 
         List<String> loopBody = new ArrayList<>();
         for (int i = startIndex + 1; i < lines.length; i++) {
             String line = lines[i].strip();
-            if (line.equals("}")) {
-                break;
-            }
+            if (line.equals("}")) braceCount ++;
+            if(braceCount == 2) break;
             loopBody.add(line);
         }
 

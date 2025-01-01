@@ -3,11 +3,10 @@ public class Main {
         String code = """
                 num := 29
                 isPrime := true
-                
                 if num <= 1 {
                    isPrime = false
                 } else {
-                   for i := 2; i*i <= num; i++ {
+                   for i := 2; i * i <= num; i++ {
                       if num%i == 0 {
                          isPrime = false
                       }
@@ -15,9 +14,9 @@ public class Main {
                 }
                 
                 if isPrime {
-                   fmt.Println("%d is prime.", num)
+                   fmt.Println("is prime")
                 } else {
-                   fmt.Println("%d is not prime.", num)
+                   fmt.Println("is not prime")
                 }
                 """;
         Interpreter.eval(code);
